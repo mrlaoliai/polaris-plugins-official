@@ -1,0 +1,100 @@
+name: Release Plugins
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-go:
+    name: Build Go Plugins
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Build knowledge_base
+        run: |
+          cd plugins/knowledge_base
+          # Build binary with standard naming: {plugin}_{os}_{arch}
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o ../../knowledge_base_${{ matrix.goos }}_${{ matrix.goarch }}${{ matrix.goos == 'windows' && '.exe' || '' }}
+      - name: Upload Go Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-binaries-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: knowledge_base_*
+          retention-days: 1
+
+  build-rust:
+    name: Build Rust Plugins
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            os_name: linux
+            arch_name: amd64
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            os_name: darwin
+            arch_name: amd64
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            os_name: darwin
+            arch_name: arm64
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            os_name: windows
+            arch_name: amd64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxdo-dev libx11-dev libxtst-dev libxcb1-dev libxkbcommon-dev
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - name: Build computer_use
+        run: |
+          cd plugins/computer_use
+          cargo build --release --target ${{ matrix.target }}
+      - name: Rename and Move Binary (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cp plugins/computer_use/target/${{ matrix.target }}/release/polaris-computer-mcp ./computer_use_${{ matrix.os_name }}_${{ matrix.arch_name }}
+      - name: Rename and Move Binary (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          copy plugins\computer_use\target\${{ matrix.target }}\release\polaris-computer-mcp.exe computer_use_${{ matrix.os_name }}_${{ matrix.arch_name }}.exe
+      - name: Upload Rust Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-binaries-${{ matrix.os_name }}-${{ matrix.arch_name }}
+          path: computer_use_*
+          retention-days: 1
+
+  release:
+    name: Publish Release
+    needs: [build-go, build-rust]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true
