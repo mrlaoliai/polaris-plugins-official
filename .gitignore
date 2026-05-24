@@ -6,3 +6,6 @@ __pycache__/
 *.dylib
 *.dll
 .DS_Store
+
+# Go binary
+plugins/knowledge_base/knowledge_base
