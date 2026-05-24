@@ -1,7 +1,7 @@
 name: Release Plugins
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 on:
   push:
@@ -58,6 +58,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: plugins/computer_use
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
@@ -115,6 +119,8 @@ jobs:
         with:
           python-version: '3.11'
           architecture: ${{ matrix.python_arch }}
+          cache: 'pip'
+          cache-dependency-path: plugins/browser_use/requirements.txt
       - name: Install dependencies
         run: |
           cd plugins/browser_use
