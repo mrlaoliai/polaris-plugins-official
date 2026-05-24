@@ -22,7 +22,14 @@ func main() {
 		mcp.WithDescription("List files in a given directory path"),
 		mcp.WithString("path", mcp.Required(), mcp.Description("The absolute path to the directory")),
 	), func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		dirPath := request.Params.Arguments["path"].(string)
+		args, ok := request.Params.Arguments.(map[string]any)
+		if !ok {
+			return mcp.NewToolResultError("invalid arguments"), nil
+		}
+		dirPath, ok := args["path"].(string)
+		if !ok {
+			return mcp.NewToolResultError("path is required and must be a string"), nil
+		}
 		entries, err := os.ReadDir(dirPath)
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("failed to read dir: %v", err)), nil
@@ -44,7 +51,14 @@ func main() {
 		mcp.WithDescription("Read the textual content of a specific file"),
 		mcp.WithString("path", mcp.Required(), mcp.Description("The absolute path to the file")),
 	), func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		filePath := request.Params.Arguments["path"].(string)
+		args, ok := request.Params.Arguments.(map[string]any)
+		if !ok {
+			return mcp.NewToolResultError("invalid arguments"), nil
+		}
+		filePath, ok := args["path"].(string)
+		if !ok {
+			return mcp.NewToolResultError("path is required and must be a string"), nil
+		}
 		data, err := os.ReadFile(filepath.Clean(filePath))
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("failed to read file: %v", err)), nil

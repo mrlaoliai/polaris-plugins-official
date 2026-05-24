@@ -31,3 +31,13 @@ Our goal is to effortlessly grant your AI Agent (such as Polaris, Claude Desktop
 
 ### Quick Start
 See the specific build and run instructions within each plugin's directory.
+
+## About the Project
+This project is an open-source extension framework designed to provide various standard capabilities for AI Agents. Through these plugins, AI systems can interact with local hardware, web resources, and file systems. It is developed and maintained to lower the barrier for AI Agent integrations.
+
+## Author
+- **ID**: mrlaoliai
+- **Email**: mrlaoliai@gmail.com
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
