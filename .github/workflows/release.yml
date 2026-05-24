@@ -82,9 +82,58 @@ jobs:
           path: computer_use_*
           retention-days: 1
 
+  build-python:
+    name: Build Python Plugins
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            os_name: linux
+            arch_name: amd64
+          - os: macos-13
+            os_name: darwin
+            arch_name: amd64
+          - os: macos-14
+            os_name: darwin
+            arch_name: arm64
+          - os: windows-latest
+            os_name: windows
+            arch_name: amd64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd plugins/browser_use
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - name: Build with PyInstaller
+        run: |
+          cd plugins/browser_use
+          pyinstaller --onefile --name browser_use_${{ matrix.os_name }}_${{ matrix.arch_name }} server.py
+      - name: Rename and Move Binary (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cp plugins/browser_use/dist/browser_use_${{ matrix.os_name }}_${{ matrix.arch_name }} ./browser_use_${{ matrix.os_name }}_${{ matrix.arch_name }}
+      - name: Rename and Move Binary (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          copy plugins\browser_use\dist\browser_use_${{ matrix.os_name }}_${{ matrix.arch_name }}.exe browser_use_${{ matrix.os_name }}_${{ matrix.arch_name }}.exe
+      - name: Upload Python Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-binaries-${{ matrix.os_name }}-${{ matrix.arch_name }}
+          path: browser_use_*
+          retention-days: 1
+
   release:
     name: Publish Release
-    needs: [build-go, build-rust]
+    needs: [build-go, build-rust, build-python]
     runs-on: ubuntu-latest
     permissions:
       contents: write
