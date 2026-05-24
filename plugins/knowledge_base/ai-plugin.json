@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_model": "knowledge_base",
+  "name_for_human": "Local Knowledge Base",
+  "description_for_model": "Plugin to read local files and list directory contents for Retrieval-Augmented Generation (RAG).",
+  "description_for_human": "Allows the AI to access local folders and read documents.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "http://localhost:0/openapi.yaml",
+    "is_user_authenticated": false
+  },
+  "logo_url": "http://localhost:0/logo.png",
+  "contact_email": "support@example.com",
+  "legal_info_url": "http://www.example.com/legal"
+}

@@ -1,0 +1,62 @@
+openapi: 3.0.1
+info:
+  title: Knowledge Base Plugin
+  description: A plugin that allows the assistant to read local files and list directory contents.
+  version: 'v1'
+servers:
+  - url: http://localhost:0
+paths:
+  /list_files:
+    post:
+      operationId: listFiles
+      summary: List files in a directory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The absolute path to the directory
+              required:
+                - path
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      type: string
+  /read_content:
+    post:
+      operationId: readContent
+      summary: Read content of a file
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The absolute path to the file
+              required:
+                - path
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
