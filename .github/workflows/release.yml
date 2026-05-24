@@ -119,8 +119,6 @@ jobs:
         with:
           python-version: '3.11'
           architecture: ${{ matrix.python_arch }}
-          cache: 'pip'
-          cache-dependency-path: plugins/browser_use/requirements.txt
       - name: Install dependencies
         run: |
           cd plugins/browser_use
