@@ -1,6 +1,8 @@
 {
-  "polarisagi-computer-use": {
-    "command": "polarisagi-computer-mcp",
-    "args": []
+  "mcpServers": {
+    "polarisagi-computer-use": {
+      "command": "polarisagi-computer-mcp",
+      "args": []
+    }
   }
 }

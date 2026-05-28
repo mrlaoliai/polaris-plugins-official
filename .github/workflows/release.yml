@@ -53,7 +53,7 @@ jobs:
             target: aarch64-unknown-linux-gnu
             os_name: linux
             arch_name: arm64
-          - os: macos-latest
+          - os: macos-13
             target: x86_64-apple-darwin
             os_name: darwin
             arch_name: amd64
@@ -72,6 +72,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: plugins/computer_use
+          cache-on-failure: true
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
@@ -87,6 +88,7 @@ jobs:
       - name: Build polarisagi-computer-mcp
         env:
           CARGO_TARGET: ${{ matrix.target }}
+          CARGO_INCREMENTAL: "0"
         shell: bash
         run: |
           cd plugins/computer_use

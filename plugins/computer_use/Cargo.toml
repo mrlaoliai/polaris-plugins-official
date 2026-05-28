@@ -3,10 +3,14 @@ name = "polarisagi-computer-mcp"
 version = "0.1.0"
 edition = "2024"
 
+[profile.release]
+codegen-units = 4  # 默认 1；并行代码生成，首次构建提速约 40%，产物性能损失极小
+lto = false        # 关闭 LTO，减少链接阶段耗时
+
 [dependencies]
 anyhow = "1.0.102"
 base64 = "0.22.1"
-enigo = { git = "https://github.com/mrlaoliai/enigo", branch = "main" }
+enigo = { git = "https://github.com/mrlaoliai/enigo", rev = "30f2b766ce9560ced52cf043405ba02e80f15eec" }
 image = "0.25.10"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"

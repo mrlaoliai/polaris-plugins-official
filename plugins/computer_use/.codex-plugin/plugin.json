@@ -11,7 +11,7 @@
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
   "license": "AGPL-3.0",
   "keywords": ["computer-use", "automation", "screenshot", "mcp"],
-  "mcpServers": "./.mcp.json",
+  "mcp_servers": "./.mcp.json",
   "interface": {
     "displayName": "Computer Use",
     "shortDescription": "Control mouse, keyboard, and capture screenshots.",

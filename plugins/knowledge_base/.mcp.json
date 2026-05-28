@@ -1,9 +1,11 @@
 {
-  "polarisagi-knowledge-base": {
-    "command": "polarisagi-knowledge-base",
-    "args": [],
-    "env": {
-      "POLARIS_KB_ALLOWED_DIR": ""
+  "mcpServers": {
+    "polarisagi-knowledge-base": {
+      "command": "polarisagi-knowledge-base",
+      "args": [],
+      "env": {
+        "POLARIS_KB_ALLOWED_DIR": ""
+      }
     }
   }
 }
