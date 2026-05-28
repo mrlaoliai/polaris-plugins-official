@@ -87,6 +87,7 @@ jobs:
       - name: Build polarisagi-computer-mcp
         env:
           CARGO_TARGET: ${{ matrix.target }}
+        shell: bash
         run: |
           cd plugins/computer_use
           cargo build --release --target "$CARGO_TARGET"
@@ -107,7 +108,7 @@ jobs:
           PLUGIN_ARCH: ${{ matrix.arch_name }}
         run: |
           copy "plugins\computer_use\target\$env:CARGO_TARGET\release\polarisagi-computer-mcp.exe" `
-               "polarisagi-computer-mcp_$env:PLUGIN_OS_$env:PLUGIN_ARCH.exe"
+               "polarisagi-computer-mcp_${env:PLUGIN_OS}_${env:PLUGIN_ARCH}.exe"
       - name: Upload Rust Artifacts
         uses: actions/upload-artifact@v4
         with:
