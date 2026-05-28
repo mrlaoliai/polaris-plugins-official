@@ -1,6 +1,6 @@
 {
-  "polaris-computer-use": {
-    "command": "./target/release/polaris-computer-mcp",
+  "polarisagi-computer-use": {
+    "command": "polarisagi-computer-mcp",
     "args": []
   }
 }

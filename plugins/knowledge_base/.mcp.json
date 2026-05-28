@@ -1,6 +1,6 @@
 {
-  "polaris-knowledge-base": {
-    "command": "./knowledge_base",
+  "polarisagi-knowledge-base": {
+    "command": "polarisagi-knowledge-base",
     "args": [],
     "env": {
       "POLARIS_KB_ALLOWED_DIR": ""

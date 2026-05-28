@@ -1,25 +1,25 @@
 {
-  "name": "polaris-computer-use",
+  "name": "polarisagi-computer-use",
   "version": "1.0.0",
   "description": "Control the computer using keyboard, mouse inputs, and capture screenshots via MCP.",
   "author": {
-    "name": "polarisagi",
+    "name": "mrlaoliai",
     "email": "polarisagi.online@gmail.com",
-    "url": "https://github.com/polarisagi"
+    "url": "https://polarisagi.online/"
   },
-  "homepage": "https://github.com/polarisagi/polarisagi-plugins-official",
+  "homepage": "https://polarisagi.online/",
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "keywords": ["computer-use", "automation", "screenshot", "mcp"],
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Computer Use",
     "shortDescription": "Control mouse, keyboard, and capture screenshots.",
-    "longDescription": "Allows the AI agent to control the computer's mouse, keyboard, and capture screenshots using native OS automation APIs. Built in Rust for low latency. Cross-platform: macOS, Windows, Linux.\n\nRequires: cargo build --release (first time only).",
-    "developerName": "polarisagi",
+    "longDescription": "Allows the AI agent to control the computer's mouse, keyboard, and capture screenshots using native OS automation APIs. Built in Rust for ultra-low latency. Cross-platform: macOS, Windows, Linux.\n\nRequires: install via install.sh (downloads pre-built binary from GitHub Releases).",
+    "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
-    "websiteURL": "https://github.com/polarisagi/polarisagi-plugins-official",
+    "websiteURL": "https://polarisagi.online/",
     "privacyPolicyURL": "https://github.com/polarisagi/polarisagi-plugins-official",
     "termsOfServiceURL": "https://github.com/polarisagi/polarisagi-plugins-official/blob/main/LICENSE",
     "defaultPrompt": [

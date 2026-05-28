@@ -6,7 +6,7 @@
 [![MCP](https://img.shields.io/badge/Anthropic-MCP-blue.svg)](https://modelcontextprotocol.io)
 [![Codex Plugin](https://img.shields.io/badge/OpenAI-Codex_Plugin-black.svg)](https://developers.openai.com/codex/plugins)
 
-**Polaris Plugins Official** is the official extension library for [Polaris AI Agent](https://github.com/polarisagi/polaris-harness), fully compatible with:
+**Polaris Plugins Official** is the official extension library for [Polaris AI Agent](https://github.com/polarisagi/polarisagi-harness), fully compatible with:
 
 - **Anthropic MCP** (Model Context Protocol) — stdio JSON-RPC 2.0, protocol version `2024-11-05`
 - **OpenAI Codex Plugin** (`.codex-plugin/plugin.json` + `.mcp.json`) — current standard
@@ -23,24 +23,11 @@
 **Drivers**: `enigo` + `xcap`  
 **Highlights**: Native compiled, ultra-low latency, cross-platform (macOS / Windows / Linux)
 
-Build:
-```bash
-cd plugins/computer_use
-cargo build --release
-```
-
-### 2. [Browser Use (Python)](plugins/browser_use)
+### 2. [Browser Use](plugins/browser_use)
 
 **Capabilities**: Navigate URLs, click elements, fill forms, capture screenshots  
-**Drivers**: [browser-use](https://github.com/browser-use/browser-use) + Playwright  
-**Highlights**: LLM-native browser automation engine
-
-Install deps:
-```bash
-cd plugins/browser_use
-pip install -r requirements.txt
-playwright install chromium
-```
+**Powered by**: [Playwright MCP](https://github.com/microsoft/playwright-mcp) (official Microsoft)  
+**Highlights**: No binary to install — `npx` downloads automatically; Node.js required
 
 ### 3. [Knowledge Base (Go)](plugins/knowledge_base)
 
@@ -48,41 +35,44 @@ playwright install chromium
 **Drivers**: `github.com/mark3labs/mcp-go`  
 **Highlights**: Single binary, zero extra deps; `POLARIS_KB_ALLOWED_DIR` env var for path sandboxing
 
-Build:
-```bash
-cd plugins/knowledge_base
-go build -o knowledge_base .
-```
-
 ---
 
 ## Installation
 
-### Option 1: Claude Code / Claude Desktop (direct MCP)
+### Step 1: Install binaries (computer_use + knowledge_base)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/polarisagi/polarisagi-plugins-official/main/install.sh | bash
+```
+
+Or download manually from [GitHub Releases](https://github.com/polarisagi/polarisagi-plugins-official/releases).  
+Available platforms: `linux/amd64`, `linux/arm64`, `darwin/amd64`, `darwin/arm64`, `windows/amd64`.
+
+### Step 2: Configure your agent
+
+#### Claude Code / Claude Desktop
 
 Add to `~/.claude.json`:
 
 ```json
 {
   "mcpServers": {
-    "polaris-computer-use": {
-      "command": "/path/to/plugins/computer_use/target/release/polaris-computer-mcp"
+    "polarisagi-computer-use": {
+      "command": "polarisagi-computer-mcp"
     },
-    "polaris-browser-use": {
-      "command": "python3",
-      "args": ["/path/to/plugins/browser_use/server.py"]
+    "polarisagi-browser-use": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--stdio"]
     },
-    "polaris-knowledge-base": {
-      "command": "/path/to/plugins/knowledge_base/knowledge_base",
+    "polarisagi-knowledge-base": {
+      "command": "polarisagi-knowledge-base",
       "env": { "POLARIS_KB_ALLOWED_DIR": "/your/allowed/dir" }
     }
   }
 }
 ```
 
-### Option 2: OpenAI Codex (plugin marketplace)
-
-Add this repo as a Codex marketplace:
+#### OpenAI Codex (plugin marketplace)
 
 ```bash
 codex plugin marketplace add polarisagi/polarisagi-plugins-official --sparse .agents/plugins
@@ -90,7 +80,7 @@ codex plugin marketplace add polarisagi/polarisagi-plugins-official --sparse .ag
 
 Then browse and install from the **Polaris Official Plugins** marketplace in the Codex App.
 
-### Option 3: Polaris AI Agent (automatic)
+#### Polaris AI Agent (automatic)
 
 Polaris `pkg/extensions/marketplace/` auto-discovers and installs plugins from this repo. Learn more at [polarisagi.online](https://polarisagi.online/).
 
@@ -102,22 +92,22 @@ Polaris `pkg/extensions/marketplace/` auto-discovers and installs plugins from t
 plugins/
   computer_use/
     .codex-plugin/plugin.json   # Codex plugin manifest
-    .mcp.json                    # MCP server config
+    .mcp.json                    # MCP server config (command: polarisagi-computer-mcp)
     src/main.rs                  # Rust MCP server
     Cargo.toml
   browser_use/
     .codex-plugin/plugin.json
-    .mcp.json
-    server.py                    # Python MCP server
-    requirements.txt
+    .mcp.json                    # MCP server config (command: npx @playwright/mcp)
   knowledge_base/
     .codex-plugin/plugin.json
-    .mcp.json
+    .mcp.json                    # MCP server config (command: polarisagi-knowledge-base)
     main.go                      # Go MCP server
     go.mod
 
 .agents/plugins/
   marketplace.json               # Codex repo-level marketplace catalog
+
+install.sh                       # Install script (downloads binaries from GitHub Releases)
 ```
 
 ## License
@@ -137,7 +127,7 @@ If this project helps you, consider sponsoring the author to support independent
 **Polaris** is an open-source self-hosted AI Agent project.
 
 - **Official Website**: [polarisagi.online](https://polarisagi.online/)
-- **GitHub**: [github.com/polarisagi/polaris-harness](https://github.com/polarisagi/polaris-harness)
+- **GitHub**: [github.com/polarisagi/polaris-harness](https://github.com/polarisagi/polarisagi-harness)
 - **Contact**: polarisagi.online@gmail.com
 
 ## Author

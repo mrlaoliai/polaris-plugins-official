@@ -1,25 +1,25 @@
 {
-  "name": "polaris-browser-use",
+  "name": "polarisagi-browser-use",
   "version": "1.0.0",
-  "description": "Control a headless browser to navigate, click, type, and capture screenshots via MCP.",
+  "description": "Control a browser to navigate, click, fill forms, and capture screenshots via Playwright MCP.",
   "author": {
-    "name": "polarisagi",
+    "name": "mrlaoliai",
     "email": "polarisagi.online@gmail.com",
-    "url": "https://github.com/polarisagi"
+    "url": "https://polarisagi.online/"
   },
-  "homepage": "https://github.com/polarisagi/polarisagi-plugins-official",
+  "homepage": "https://polarisagi.online/",
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
-  "license": "MIT",
-  "keywords": ["browser-use", "playwright", "web-automation", "mcp"],
+  "license": "AGPL-3.0",
+  "keywords": ["browser", "playwright", "web-automation", "mcp"],
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Browser Use",
     "shortDescription": "Navigate, click, type, and screenshot web pages.",
-    "longDescription": "Allows the AI agent to control a headless Chromium browser using Playwright. Supports navigation, DOM interaction, form filling, and screenshot capture. Built in Python with browser-use.\n\nRequires: pip install -r requirements.txt (first time only).",
-    "developerName": "polarisagi",
+    "longDescription": "Browser automation via the official Playwright MCP server. Supports navigation, DOM interaction, form filling, and screenshot capture.\n\nRequires: Node.js (npx auto-downloads @playwright/mcp on first use).",
+    "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
-    "websiteURL": "https://github.com/polarisagi/polarisagi-plugins-official",
+    "websiteURL": "https://polarisagi.online/",
     "privacyPolicyURL": "https://github.com/polarisagi/polarisagi-plugins-official",
     "termsOfServiceURL": "https://github.com/polarisagi/polarisagi-plugins-official/blob/main/LICENSE",
     "defaultPrompt": [

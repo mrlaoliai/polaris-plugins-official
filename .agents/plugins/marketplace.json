@@ -1,11 +1,11 @@
 {
-  "name": "polaris-plugins-official",
+  "name": "polarisagi-plugins-official",
   "interface": {
     "displayName": "Polaris Official Plugins"
   },
   "plugins": [
     {
-      "name": "polaris-computer-use",
+      "name": "polarisagi-computer-use",
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/polarisagi/polarisagi-plugins-official.git",
@@ -19,7 +19,7 @@
       "category": "Productivity"
     },
     {
-      "name": "polaris-browser-use",
+      "name": "polarisagi-browser-use",
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/polarisagi/polarisagi-plugins-official.git",
@@ -33,7 +33,7 @@
       "category": "Productivity"
     },
     {
-      "name": "polaris-knowledge-base",
+      "name": "polarisagi-knowledge-base",
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/polarisagi/polarisagi-plugins-official.git",
