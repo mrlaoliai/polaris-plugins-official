@@ -121,7 +121,15 @@ plugins/
 
 ## License
 
-MIT — see [LICENSE](LICENSE)
+This project is licensed under the **GNU Affero General Public License v3.0 (AGPLv3)** — see the [LICENSE](LICENSE) file for details.
+
+### Commercial Licensing (Dual License)
+
+For enterprises or individuals who wish to use, integrate, or distribute this project in closed-source commercial products, a commercial license is required. Please contact `polarisagi.online@gmail.com` to purchase a commercial license.
+
+## Support & Sponsorship
+
+If this project helps you, consider sponsoring the author to support independent development! ☕️
 
 ## Author
 

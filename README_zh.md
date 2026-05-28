@@ -121,7 +121,15 @@ plugins/
 
 ## 开源协议
 
-MIT — 详见 [LICENSE](LICENSE)
+本项目采用 **GNU Affero General Public License v3.0 (AGPLv3)** 协议开源 — 详见 [LICENSE](LICENSE) 文件。
+
+### 商业授权 (Dual License)
+
+如果您希望在闭源商业产品中使用、集成或分发本项目的代码，您需要购买商业授权。请联系 `polarisagi.online@gmail.com` 获取商业授权许可。
+
+## 赞助与支持
+
+如果您觉得这个项目对您有帮助，欢迎赞助作者，支持个人独立开发者的持续创作！☕️
 
 ## 作者
 
