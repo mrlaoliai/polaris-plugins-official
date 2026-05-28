@@ -1,0 +1,9 @@
+{
+  "polaris-knowledge-base": {
+    "command": "./knowledge_base",
+    "args": [],
+    "env": {
+      "POLARIS_KB_ALLOWED_DIR": ""
+    }
+  }
+}

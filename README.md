@@ -2,42 +2,127 @@
 
 🌎 [English](README.md) | 🇨🇳 [中文](README_zh.md)
 
-[![OpenAI Plugin](https://img.shields.io/badge/OpenAI-Plugin-brightgreen.svg)](https://platform.openai.com/docs/plugins/introduction)
 [![MCP](https://img.shields.io/badge/Anthropic-MCP-blue.svg)](https://modelcontextprotocol.io)
+[![Codex Plugin](https://img.shields.io/badge/OpenAI-Codex_Plugin-black.svg)](https://developers.openai.com/codex/plugins)
 
-**Polaris Plugins Official** is the official extension repository for the [Polaris AI Agent System](https://github.com/mrlaoliai/polaris-harness).
-This project provides a suite of plug-and-play AI extensions fully compliant with two major industry standards:
-- **OpenAI Plugin Standard** (`ai-plugin.json` + OpenAPI Schema)
-- **Anthropic MCP (Model Context Protocol) Standard**
+**Polaris Plugins Official** is the official extension library for [Polaris AI Agent](https://github.com/polarisagi/polaris-harness), fully compatible with:
 
-Our goal is to effortlessly grant your AI Agent (such as Polaris, Claude Desktop, Cursor, etc.) the powerful abilities to control computers, operate browsers, and read knowledge bases.
+- **Anthropic MCP** (Model Context Protocol) — stdio JSON-RPC 2.0, protocol version `2024-11-05`
+- **OpenAI Codex Plugin** (`.codex-plugin/plugin.json` + `.mcp.json`) — current standard
 
-### Plugin Directory
+> **Note**: The legacy `ai-plugin.json` format (ChatGPT Plugin Store) was deprecated in March 2024 and is not used here.
 
-1. **[Computer Use (Rust)](plugins/computer_use)**
-   - **Capabilities**: Mouse movement, clicks, keyboard typing, and taking screenshots.
-   - **Driver**: `enigo` and `xcap`
-   - **Highlights**: Natively compiled, ultra-low latency, cross-platform.
+---
 
-2. **[Browser Use (Python)](plugins/browser_use)**
-   - **Capabilities**: Navigate web pages, click elements, fill forms, and extract DOM trees.
-   - **Driver**: [browser-use](https://github.com/browser-use/browser-use) with `Playwright`
-   - **Highlights**: Built specifically for Large Language Models to interact with the web reliably.
+## Plugins
 
-3. **[Knowledge Base (Go)](plugins/knowledge_base)**
-   - **Capabilities**: Scan local file systems and read document contents for LLM RAG (Retrieval-Augmented Generation).
-   - **Driver**: `github.com/mark3labs/mcp-go`
-   - **Highlights**: Single binary distribution, no external dependencies.
+### 1. [Computer Use (Rust)](plugins/computer_use)
 
-### Quick Start
-See the specific build and run instructions within each plugin's directory.
+**Capabilities**: Screenshot, mouse move/click/drag, keyboard input  
+**Drivers**: `enigo` + `xcap`  
+**Highlights**: Native compiled, ultra-low latency, cross-platform (macOS / Windows / Linux)
 
-## About the Project
-This project is an open-source extension framework designed to provide various standard capabilities for AI Agents. Through these plugins, AI systems can interact with local hardware, web resources, and file systems. It is developed and maintained to lower the barrier for AI Agent integrations.
+Build:
+```bash
+cd plugins/computer_use
+cargo build --release
+```
 
-## Author
-- **ID**: mrlaoliai
-- **Email**: mrlaoliai@gmail.com
+### 2. [Browser Use (Python)](plugins/browser_use)
+
+**Capabilities**: Navigate URLs, click elements, fill forms, capture screenshots  
+**Drivers**: [browser-use](https://github.com/browser-use/browser-use) + Playwright  
+**Highlights**: LLM-native browser automation engine
+
+Install deps:
+```bash
+cd plugins/browser_use
+pip install -r requirements.txt
+playwright install chromium
+```
+
+### 3. [Knowledge Base (Go)](plugins/knowledge_base)
+
+**Capabilities**: List directory contents, read file content for RAG  
+**Drivers**: `github.com/mark3labs/mcp-go`  
+**Highlights**: Single binary, zero extra deps; `POLARIS_KB_ALLOWED_DIR` env var for path sandboxing
+
+Build:
+```bash
+cd plugins/knowledge_base
+go build -o knowledge_base .
+```
+
+---
+
+## Installation
+
+### Option 1: Claude Code / Claude Desktop (direct MCP)
+
+Add to `~/.claude.json`:
+
+```json
+{
+  "mcpServers": {
+    "polaris-computer-use": {
+      "command": "/path/to/plugins/computer_use/target/release/polaris-computer-mcp"
+    },
+    "polaris-browser-use": {
+      "command": "python3",
+      "args": ["/path/to/plugins/browser_use/server.py"]
+    },
+    "polaris-knowledge-base": {
+      "command": "/path/to/plugins/knowledge_base/knowledge_base",
+      "env": { "POLARIS_KB_ALLOWED_DIR": "/your/allowed/dir" }
+    }
+  }
+}
+```
+
+### Option 2: OpenAI Codex (plugin marketplace)
+
+Add this repo as a Codex marketplace:
+
+```bash
+codex plugin marketplace add polarisagi/polarisagi-plugins-official --sparse .agents/plugins
+```
+
+Then browse and install from the **Polaris Official Plugins** marketplace in the Codex App.
+
+### Option 3: Polaris AI Agent (automatic)
+
+Polaris `pkg/extensions/marketplace/` auto-discovers and installs plugins from this repo.
+
+---
+
+## Repository Structure
+
+```
+plugins/
+  computer_use/
+    .codex-plugin/plugin.json   # Codex plugin manifest
+    .mcp.json                    # MCP server config
+    src/main.rs                  # Rust MCP server
+    Cargo.toml
+  browser_use/
+    .codex-plugin/plugin.json
+    .mcp.json
+    server.py                    # Python MCP server
+    requirements.txt
+  knowledge_base/
+    .codex-plugin/plugin.json
+    .mcp.json
+    main.go                      # Go MCP server
+    go.mod
+
+.agents/plugins/
+  marketplace.json               # Codex repo-level marketplace catalog
+```
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+MIT — see [LICENSE](LICENSE)
+
+## Author
+
+- **polarisagi** · polarisagi.online@gmail.com

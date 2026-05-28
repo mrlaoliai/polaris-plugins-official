@@ -11,6 +11,21 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
+// allowedDir 为空时不做路径限制；通过 POLARIS_KB_ALLOWED_DIR 环境变量配置
+var allowedDir = os.Getenv("POLARIS_KB_ALLOWED_DIR")
+
+func isPathAllowed(target string) bool {
+	if allowedDir == "" {
+		return true
+	}
+	abs, err := filepath.Abs(target)
+	if err != nil {
+		return false
+	}
+	root := filepath.Clean(allowedDir)
+	return abs == root || strings.HasPrefix(abs, root+string(filepath.Separator))
+}
+
 func main() {
 	s := server.NewMCPServer(
 		"knowledge_base",
@@ -29,6 +44,9 @@ func main() {
 		dirPath, ok := args["path"].(string)
 		if !ok {
 			return mcp.NewToolResultError("path is required and must be a string"), nil
+		}
+		if !isPathAllowed(dirPath) {
+			return mcp.NewToolResultError("path is outside the allowed directory (POLARIS_KB_ALLOWED_DIR)"), nil
 		}
 		entries, err := os.ReadDir(dirPath)
 		if err != nil {
@@ -58,6 +76,9 @@ func main() {
 		filePath, ok := args["path"].(string)
 		if !ok {
 			return mcp.NewToolResultError("path is required and must be a string"), nil
+		}
+		if !isPathAllowed(filePath) {
+			return mcp.NewToolResultError("path is outside the allowed directory (POLARIS_KB_ALLOWED_DIR)"), nil
 		}
 		data, err := os.ReadFile(filepath.Clean(filePath))
 		if err != nil {

@@ -2,42 +2,127 @@
 
 🌎 [English](README.md) | 🇨🇳 [中文](README_zh.md)
 
-[![OpenAI Plugin](https://img.shields.io/badge/OpenAI-Plugin-brightgreen.svg)](https://platform.openai.com/docs/plugins/introduction)
 [![MCP](https://img.shields.io/badge/Anthropic-MCP-blue.svg)](https://modelcontextprotocol.io)
+[![Codex Plugin](https://img.shields.io/badge/OpenAI-Codex_Plugin-black.svg)](https://developers.openai.com/codex/plugins)
 
-**Polaris Plugins Official** 是 [Polaris AI Agent 系统](https://github.com/mrlaoliai/polaris-harness) 的官方扩展库。
-本项目提供了一系列即插即用的 AI 扩展，全面兼容两大行业标准：
-- **OpenAI Plugin 标准** (`ai-plugin.json` + OpenAPI Schema)
-- **Anthropic MCP (Model Context Protocol) 标准**
+**Polaris Plugins Official** 是 [Polaris AI Agent](https://github.com/polarisagi/polaris-harness) 的官方扩展库，同时完全兼容以下行业标准：
 
-我们的目标是让您的 AI Agent（如 Polaris, Claude Desktop, Cursor 等）轻松获得操作电脑、控制浏览器、读取知识库的强大能力。
+- **Anthropic MCP**（Model Context Protocol）—— stdio JSON-RPC 2.0，协议版本 `2024-11-05`
+- **OpenAI Codex Plugin**（`.codex-plugin/plugin.json` + `.mcp.json`）—— 当前现行标准
 
-### 插件列表
+> **注**：旧版 `ai-plugin.json`（ChatGPT Plugin Store 格式）已于 2024 年 3 月废弃，本项目不再使用。
 
-1. **[Computer Use (Rust)](plugins/computer_use)**
-   - **能力**: 控制鼠标移动、点击、键盘输入、截图。
-   - **底层驱动**: `enigo` 和 `xcap`
-   - **特点**: 原生编译，极低延迟，跨平台。
+---
 
-2. **[Browser Use (Python)](plugins/browser_use)**
-   - **能力**: 导航网页、点击页面元素、输入表单数据、抓取网页 DOM 树结构。
-   - **底层驱动**: [browser-use](https://github.com/browser-use/browser-use) 结合 `Playwright`
-   - **特点**: 专为大语言模型打造的抗干扰浏览引擎。
+## 插件列表
 
-3. **[Knowledge Base (Go)](plugins/knowledge_base)**
-   - **能力**: 扫描本地机器文件系统，读取文档内容，供大模型用于 RAG (检索增强生成)。
-   - **底层驱动**: `github.com/mark3labs/mcp-go`
-   - **特点**: 单体文件分发，无额外环境依赖。
+### 1. [Computer Use (Rust)](plugins/computer_use)
 
-### 快速开始
-详见每个插件目录下的具体构建与运行说明。
+**能力**：截图、鼠标移动/点击/拖拽、键盘输入  
+**底层驱动**：`enigo` + `xcap`  
+**特点**：原生编译，极低延迟，跨平台（macOS / Windows / Linux）
 
-## 项目说明
-本项目是一个开源的扩展框架，旨在为各种 AI Agent 提供标准化的能力支持。通过这些插件，AI 系统能够更自然地与本地硬件、网络资源和文件系统进行交互。我们开发并维护此项目，以降低 AI Agent 的集成门槛。
+构建：
+```bash
+cd plugins/computer_use
+cargo build --release
+```
 
-## 作者
-- **作者 ID**: mrlaoliai
-- **邮箱**: mrlaoliai@gmail.com
+### 2. [Browser Use (Python)](plugins/browser_use)
+
+**能力**：导航网页、点击元素、填写表单、截图  
+**底层驱动**：[browser-use](https://github.com/browser-use/browser-use) + Playwright  
+**特点**：专为 LLM 打造的抗干扰浏览引擎
+
+安装依赖：
+```bash
+cd plugins/browser_use
+pip install -r requirements.txt
+playwright install chromium
+```
+
+### 3. [Knowledge Base (Go)](plugins/knowledge_base)
+
+**能力**：扫描本地文件系统、读取文档内容，用于 RAG 检索增强生成  
+**底层驱动**：`github.com/mark3labs/mcp-go`  
+**特点**：单体文件，零额外依赖；支持 `POLARIS_KB_ALLOWED_DIR` 路径白名单
+
+构建：
+```bash
+cd plugins/knowledge_base
+go build -o knowledge_base .
+```
+
+---
+
+## 安装方式
+
+### 方式一：Claude Code / Claude Desktop（MCP 直连）
+
+在 `~/.claude.json` 中添加：
+
+```json
+{
+  "mcpServers": {
+    "polaris-computer-use": {
+      "command": "/path/to/plugins/computer_use/target/release/polaris-computer-mcp"
+    },
+    "polaris-browser-use": {
+      "command": "python3",
+      "args": ["/path/to/plugins/browser_use/server.py"]
+    },
+    "polaris-knowledge-base": {
+      "command": "/path/to/plugins/knowledge_base/knowledge_base",
+      "env": { "POLARIS_KB_ALLOWED_DIR": "/your/allowed/dir" }
+    }
+  }
+}
+```
+
+### 方式二：OpenAI Codex（Plugin 市场安装）
+
+在 Codex CLI 中添加本仓库作为插件市场：
+
+```bash
+codex plugin marketplace add polarisagi/polarisagi-plugins-official --sparse .agents/plugins
+```
+
+然后在 Codex App 中从 **Polaris Official Plugins** 市场浏览并安装。
+
+### 方式三：Polaris AI Agent（自动）
+
+Polaris 的 `pkg/extensions/marketplace/` 模块会自动发现并安装本仓库的插件，无需手动配置。
+
+---
+
+## 项目结构
+
+```
+plugins/
+  computer_use/
+    .codex-plugin/plugin.json   # Codex 插件清单
+    .mcp.json                    # MCP 服务器配置
+    src/main.rs                  # Rust MCP 服务器实现
+    Cargo.toml
+  browser_use/
+    .codex-plugin/plugin.json
+    .mcp.json
+    server.py                    # Python MCP 服务器实现
+    requirements.txt
+  knowledge_base/
+    .codex-plugin/plugin.json
+    .mcp.json
+    main.go                      # Go MCP 服务器实现
+    go.mod
+
+.agents/plugins/
+  marketplace.json               # Codex repo 级市场目录
+```
 
 ## 开源协议
-本项目采用 MIT 开源协议 - 详情请查看 [LICENSE](LICENSE) 文件。
+
+MIT — 详见 [LICENSE](LICENSE)
+
+## 作者
+
+- **polarisagi** · polarisagi.online@gmail.com

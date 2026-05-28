@@ -1,0 +1,6 @@
+{
+  "polaris-computer-use": {
+    "command": "./target/release/polaris-computer-mcp",
+    "args": []
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "polaris-computer-use",
+  "version": "1.0.0",
+  "description": "Control the computer using keyboard, mouse inputs, and capture screenshots via MCP.",
+  "author": {
+    "name": "polarisagi",
+    "email": "polarisagi.online@gmail.com",
+    "url": "https://github.com/polarisagi"
+  },
+  "homepage": "https://github.com/polarisagi/polarisagi-plugins-official",
+  "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
+  "license": "MIT",
+  "keywords": ["computer-use", "automation", "screenshot", "mcp"],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Computer Use",
+    "shortDescription": "Control mouse, keyboard, and capture screenshots.",
+    "longDescription": "Allows the AI agent to control the computer's mouse, keyboard, and capture screenshots using native OS automation APIs. Built in Rust for low latency. Cross-platform: macOS, Windows, Linux.\n\nRequires: cargo build --release (first time only).",
+    "developerName": "polarisagi",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/polarisagi/polarisagi-plugins-official",
+    "privacyPolicyURL": "https://github.com/polarisagi/polarisagi-plugins-official",
+    "termsOfServiceURL": "https://github.com/polarisagi/polarisagi-plugins-official/blob/main/LICENSE",
+    "defaultPrompt": [
+      "Take a screenshot of the current screen.",
+      "Click on the button at coordinates [100, 200].",
+      "Type 'Hello World' into the active window."
+    ]
+  }
+}

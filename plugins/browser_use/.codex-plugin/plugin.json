@@ -1,0 +1,31 @@
+{
+  "name": "polaris-browser-use",
+  "version": "1.0.0",
+  "description": "Control a headless browser to navigate, click, type, and capture screenshots via MCP.",
+  "author": {
+    "name": "polarisagi",
+    "email": "polarisagi.online@gmail.com",
+    "url": "https://github.com/polarisagi"
+  },
+  "homepage": "https://github.com/polarisagi/polarisagi-plugins-official",
+  "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
+  "license": "MIT",
+  "keywords": ["browser-use", "playwright", "web-automation", "mcp"],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Browser Use",
+    "shortDescription": "Navigate, click, type, and screenshot web pages.",
+    "longDescription": "Allows the AI agent to control a headless Chromium browser using Playwright. Supports navigation, DOM interaction, form filling, and screenshot capture. Built in Python with browser-use.\n\nRequires: pip install -r requirements.txt (first time only).",
+    "developerName": "polarisagi",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/polarisagi/polarisagi-plugins-official",
+    "privacyPolicyURL": "https://github.com/polarisagi/polarisagi-plugins-official",
+    "termsOfServiceURL": "https://github.com/polarisagi/polarisagi-plugins-official/blob/main/LICENSE",
+    "defaultPrompt": [
+      "Navigate to https://example.com and take a screenshot.",
+      "Click the login button on the current page.",
+      "Fill in the search box with 'AI agents'."
+    ]
+  }
+}

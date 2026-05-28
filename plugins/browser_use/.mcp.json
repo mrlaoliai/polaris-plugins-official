@@ -1,0 +1,6 @@
+{
+  "polaris-browser-use": {
+    "command": "python3",
+    "args": ["./server.py"]
+  }
+}

@@ -1,4 +1,4 @@
-module github.com/mrlaoliai/polaris-plugins-official/knowledge_base
+module github.com/polarisagi/polarisagi-plugins-official/knowledge_base
 
 go 1.26.3
 

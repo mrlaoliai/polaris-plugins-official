@@ -80,15 +80,17 @@ async fn main() -> Result<()> {
                             "properties": {
                                 "action": {
                                     "type": "string",
-                                    "enum": ["screenshot", "left_click", "right_click", "double_click", "mouse_move", "left_click_drag", "type", "key", "get_ui_tree"]
+                                    "enum": ["screenshot", "left_click", "right_click", "double_click", "mouse_move", "left_click_drag", "type", "key"],
+                                    "description": "left_click_drag: press at current position, move to coordinate, release."
                                 },
                                 "coordinate": {
                                     "type": "array",
                                     "items": { "type": "number" },
-                                    "description": "[x, y] coordinates"
+                                    "description": "[x, y] coordinates for mouse actions. For left_click_drag, this is the drag destination."
                                 },
                                 "text": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Text to type (action=type) or key name to press (action=key)."
                                 }
                             },
                             "required": ["action"]
@@ -205,10 +207,7 @@ fn handle_computer_use(enigo: &mut Enigo, args: Value) -> Result<Vec<Value>> {
             Ok(vec![json!({"type": "text", "text": "success"})])
         },
         "left_click_drag" => {
-            enigo.move_mouse(x, y, Coordinate::Abs)?;
-            // Note: simple drag implementation (down, move, up is complex without destination,
-            // assuming the provided coordinates are destination and we start from current?
-            // Actually Claude computer-use expects dragging to the x, y coordinates)
+            // coordinate 是拖拽终点，从当前鼠标位置按下后移动
             enigo.button(Button::Left, Direction::Press)?;
             enigo.move_mouse(x, y, Coordinate::Abs)?;
             enigo.button(Button::Left, Direction::Release)?;
