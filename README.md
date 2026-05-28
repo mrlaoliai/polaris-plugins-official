@@ -2,6 +2,7 @@
 
 🌎 [English](README.md) | 🇨🇳 [中文](README_zh.md)
 
+[![Website](https://img.shields.io/badge/Website-polarisagi.online-brightgreen.svg)](https://polarisagi.online/)
 [![MCP](https://img.shields.io/badge/Anthropic-MCP-blue.svg)](https://modelcontextprotocol.io)
 [![Codex Plugin](https://img.shields.io/badge/OpenAI-Codex_Plugin-black.svg)](https://developers.openai.com/codex/plugins)
 
@@ -91,7 +92,7 @@ Then browse and install from the **Polaris Official Plugins** marketplace in the
 
 ### Option 3: Polaris AI Agent (automatic)
 
-Polaris `pkg/extensions/marketplace/` auto-discovers and installs plugins from this repo.
+Polaris `pkg/extensions/marketplace/` auto-discovers and installs plugins from this repo. Learn more at [polarisagi.online](https://polarisagi.online/).
 
 ---
 
@@ -131,6 +132,22 @@ For enterprises or individuals who wish to use, integrate, or distribute this pr
 
 If this project helps you, consider sponsoring the author to support independent development! ☕️
 
+## About Polaris
+
+**Polaris** is an open-source self-hosted AI Agent project.
+
+- **Official Website**: [polarisagi.online](https://polarisagi.online/)
+- **GitHub**: [github.com/polarisagi/polaris-harness](https://github.com/polarisagi/polaris-harness)
+- **Contact**: polarisagi.online@gmail.com
+
 ## Author
 
-- **polarisagi** · polarisagi.online@gmail.com
+**mrlaoliai** — Independent AI Developer
+
+Find me on:
+- **Xiaohongshu (小红书)**: mrlaoliai
+- **Douyin (抖音)**: mrlaoliai
+- **TikTok**: mrlaoliai
+- **X (Twitter)**: mrlaoliai
+
+Contact: polarisagi.online@gmail.com

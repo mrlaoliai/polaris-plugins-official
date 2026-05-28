@@ -2,6 +2,7 @@
 
 🌎 [English](README.md) | 🇨🇳 [中文](README_zh.md)
 
+[![Website](https://img.shields.io/badge/官网-polarisagi.online-brightgreen.svg)](https://polarisagi.online/)
 [![MCP](https://img.shields.io/badge/Anthropic-MCP-blue.svg)](https://modelcontextprotocol.io)
 [![Codex Plugin](https://img.shields.io/badge/OpenAI-Codex_Plugin-black.svg)](https://developers.openai.com/codex/plugins)
 
@@ -91,7 +92,7 @@ codex plugin marketplace add polarisagi/polarisagi-plugins-official --sparse .ag
 
 ### 方式三：Polaris AI Agent（自动）
 
-Polaris 的 `pkg/extensions/marketplace/` 模块会自动发现并安装本仓库的插件，无需手动配置。
+Polaris 的 `pkg/extensions/marketplace/` 模块会自动发现并安装本仓库的插件，无需手动配置。了解更多请访问 [polarisagi.online](https://polarisagi.online/)。
 
 ---
 
@@ -131,6 +132,22 @@ plugins/
 
 如果您觉得这个项目对您有帮助，欢迎赞助作者，支持个人独立开发者的持续创作！☕️
 
+## 关于 Polaris
+
+**Polaris** 是一个开源自托管 AI Agent 项目。
+
+- **官方网站**：[polarisagi.online](https://polarisagi.online/)
+- **GitHub**：[github.com/polarisagi/polaris-harness](https://github.com/polarisagi/polaris-harness)
+- **联系邮箱**：polarisagi.online@gmail.com
+
 ## 作者
 
-- **polarisagi** · polarisagi.online@gmail.com
+**mrlaoliai** — 独立 AI 开发者
+
+关注我：
+- **小红书**：mrlaoliai
+- **抖音**：mrlaoliai
+- **TikTok**：mrlaoliai
+- **X (Twitter)**：mrlaoliai
+
+联系邮箱：polarisagi.online@gmail.com
