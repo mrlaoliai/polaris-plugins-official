@@ -55,11 +55,13 @@ func main() {
 
 		var files []string
 		for _, e := range entries {
-			if !e.IsDir() {
+			if e.IsDir() {
+				files = append(files, e.Name()+"/")
+			} else {
 				files = append(files, e.Name())
 			}
 		}
-		
+
 		result := fmt.Sprintf("Files in %s:\n%s", dirPath, strings.Join(files, "\n"))
 		return mcp.NewToolResultText(result), nil
 	})

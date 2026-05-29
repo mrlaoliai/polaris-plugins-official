@@ -112,11 +112,7 @@ install.sh                       # Install script (downloads binaries from GitHu
 
 ## License
 
-This project is licensed under the **GNU Affero General Public License v3.0 (AGPLv3)** — see the [LICENSE](LICENSE) file for details.
-
-### Commercial Licensing (Dual License)
-
-For enterprises or individuals who wish to use, integrate, or distribute this project in closed-source commercial products, a commercial license is required. Please contact `polarisagi.online@gmail.com` to purchase a commercial license.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ## Support & Sponsorship
 

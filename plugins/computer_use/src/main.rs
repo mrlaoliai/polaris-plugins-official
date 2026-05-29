@@ -1,8 +1,8 @@
-use anyhow::{anyhow, Result};
-use base64::{engine::general_purpose::STANDARD, Engine as _};
-use enigo::{Enigo, Keyboard, Mouse, Settings, Coordinate, Button, Direction, Key};
+use anyhow::{Result, anyhow};
+use base64::{Engine as _, engine::general_purpose::STANDARD};
+use enigo::{Button, Coordinate, Direction, Enigo, Key, Keyboard, Mouse, Settings};
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::io::{self, BufRead, Write};
 use xcap::Monitor;
 
@@ -32,8 +32,9 @@ struct RpcError {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let mut enigo = Enigo::new(&Settings::default()).map_err(|e| anyhow!("Failed to initialize enigo: {}", e))?;
-    
+    let mut enigo = Enigo::new(&Settings::default())
+        .map_err(|e| anyhow!("Failed to initialize enigo: {}", e))?;
+
     let stdin = io::stdin();
     let mut stdout = io::stdout();
 
@@ -56,58 +57,66 @@ async fn main() -> Result<()> {
         };
 
         let id = req.id.clone();
-        
+
         match req.method.as_str() {
             "initialize" => {
-                send_result(id, json!({
-                    "protocolVersion": "2024-11-05",
-                    "capabilities": {
-                        "tools": {}
-                    },
-                    "serverInfo": {
-                        "name": "polaris-computer-mcp",
-                        "version": "0.1.0"
-                    }
-                }), &mut stdout);
-            },
-            "tools/list" => {
-                send_result(id, json!({
-                    "tools": [{
-                        "name": "computer_use_action",
-                        "description": "Execute computer actions like clicking, typing, and taking screenshots.",
-                        "inputSchema": {
-                            "type": "object",
-                            "properties": {
-                                "action": {
-                                    "type": "string",
-                                    "enum": ["screenshot", "left_click", "right_click", "double_click", "mouse_move", "left_click_drag", "type", "key"],
-                                    "description": "left_click_drag: press at current position, move to coordinate, release."
-                                },
-                                "coordinate": {
-                                    "type": "array",
-                                    "items": { "type": "number" },
-                                    "description": "[x, y] coordinates for mouse actions. For left_click_drag, this is the drag destination."
-                                },
-                                "text": {
-                                    "type": "string",
-                                    "description": "Text to type (action=type) or key name to press (action=key)."
-                                }
-                            },
-                            "required": ["action"]
+                send_result(
+                    id,
+                    json!({
+                        "protocolVersion": "2024-11-05",
+                        "capabilities": {
+                            "tools": {}
+                        },
+                        "serverInfo": {
+                            "name": "polaris-computer-mcp",
+                            "version": "0.1.0"
                         }
-                    }]
-                }), &mut stdout);
-            },
+                    }),
+                    &mut stdout,
+                );
+            }
+            "tools/list" => {
+                send_result(
+                    id,
+                    json!({
+                        "tools": [{
+                            "name": "computer_use_action",
+                            "description": "Execute computer actions like clicking, typing, and taking screenshots.",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "string",
+                                        "enum": ["screenshot", "left_click", "right_click", "double_click", "mouse_move", "left_click_drag", "type", "key"],
+                                        "description": "left_click_drag: press at current position, move to coordinate, release."
+                                    },
+                                    "coordinate": {
+                                        "type": "array",
+                                        "items": { "type": "number" },
+                                        "description": "[x, y] coordinates for mouse actions. For left_click_drag, this is the drag destination."
+                                    },
+                                    "text": {
+                                        "type": "string",
+                                        "description": "Text to type (action=type) or key name to press (action=key)."
+                                    }
+                                },
+                                "required": ["action"]
+                            }
+                        }]
+                    }),
+                    &mut stdout,
+                );
+            }
             "tools/call" => {
                 let params = req.params.unwrap_or_default();
                 let name = params["name"].as_str().unwrap_or("");
-                
+
                 if name == "computer_use_action" {
                     let args = params["arguments"].clone();
                     match handle_computer_use(&mut enigo, args) {
                         Ok(content) => {
                             send_result(id, json!({ "content": content }), &mut stdout);
-                        },
+                        }
                         Err(e) => {
                             send_error(id, -32603, format!("Execution error: {}", e), &mut stdout);
                         }
@@ -115,11 +124,16 @@ async fn main() -> Result<()> {
                 } else {
                     send_error(id, -32601, "Tool not found".to_string(), &mut stdout);
                 }
-            },
+            }
             _ => {
                 // Ignore notifications (no id)
                 if id.is_some() {
-                    send_error(id, -32601, format!("Method not found: {}", req.method), &mut stdout);
+                    send_error(
+                        id,
+                        -32601,
+                        format!("Method not found: {}", req.method),
+                        &mut stdout,
+                    );
                 }
             }
         }
@@ -129,7 +143,9 @@ async fn main() -> Result<()> {
 }
 
 fn send_result(id: Option<Value>, result: Value, stdout: &mut io::Stdout) {
-    if id.is_none() { return; }
+    if id.is_none() {
+        return;
+    }
     let resp = RpcResponse {
         jsonrpc: "2.0".to_string(),
         id,
@@ -156,8 +172,10 @@ fn send_error(id: Option<Value>, code: i32, message: String, stdout: &mut io::St
 }
 
 fn handle_computer_use(enigo: &mut Enigo, args: Value) -> Result<Vec<Value>> {
-    let action = args["action"].as_str().ok_or_else(|| anyhow!("Missing action parameter"))?;
-    
+    let action = args["action"]
+        .as_str()
+        .ok_or_else(|| anyhow!("Missing action parameter"))?;
+
     // Parse coordinates if available
     let mut x = 0;
     let mut y = 0;
@@ -172,54 +190,60 @@ fn handle_computer_use(enigo: &mut Enigo, args: Value) -> Result<Vec<Value>> {
         "screenshot" => {
             let monitors = Monitor::all()?;
             // Get primary monitor (usually the first one)
-            let monitor = monitors.first().ok_or_else(|| anyhow!("No monitors found"))?;
+            let monitor = monitors
+                .first()
+                .ok_or_else(|| anyhow!("No monitors found"))?;
             let image = monitor.capture_image()?;
-            
+
             // Encode to base64 jpeg or png
             let mut cursor = std::io::Cursor::new(Vec::new());
             image.write_to(&mut cursor, image::ImageFormat::Png)?;
             let b64 = STANDARD.encode(cursor.into_inner());
-            
+
             Ok(vec![json!({
                 "type": "image",
                 "data": b64,
                 "mimeType": "image/png"
             })])
-        },
+        }
         "mouse_move" => {
             enigo.move_mouse(x, y, Coordinate::Abs)?;
             Ok(vec![json!({"type": "text", "text": "success"})])
-        },
+        }
         "left_click" => {
             enigo.move_mouse(x, y, Coordinate::Abs)?;
             enigo.button(Button::Left, Direction::Click)?;
             Ok(vec![json!({"type": "text", "text": "success"})])
-        },
+        }
         "right_click" => {
             enigo.move_mouse(x, y, Coordinate::Abs)?;
             enigo.button(Button::Right, Direction::Click)?;
             Ok(vec![json!({"type": "text", "text": "success"})])
-        },
+        }
         "double_click" => {
             enigo.move_mouse(x, y, Coordinate::Abs)?;
             enigo.button(Button::Left, Direction::Click)?;
             enigo.button(Button::Left, Direction::Click)?;
             Ok(vec![json!({"type": "text", "text": "success"})])
-        },
+        }
         "left_click_drag" => {
             // coordinate 是拖拽终点，从当前鼠标位置按下后移动
             enigo.button(Button::Left, Direction::Press)?;
             enigo.move_mouse(x, y, Coordinate::Abs)?;
             enigo.button(Button::Left, Direction::Release)?;
             Ok(vec![json!({"type": "text", "text": "success"})])
-        },
+        }
         "type" => {
-            let text = args["text"].as_str().ok_or_else(|| anyhow!("Missing text parameter"))?;
+            let text = args["text"]
+                .as_str()
+                .ok_or_else(|| anyhow!("Missing text parameter"))?;
             enigo.text(text)?;
             Ok(vec![json!({"type": "text", "text": "success"})])
-        },
+        }
         "key" => {
-            let text = args["text"].as_str().ok_or_else(|| anyhow!("Missing text parameter"))?;
+            let text = args["text"]
+                .as_str()
+                .ok_or_else(|| anyhow!("Missing text parameter"))?;
             // Basic key mapping for common special keys
             let key = match text.to_lowercase().as_str() {
                 "return" | "enter" => Key::Return,
@@ -252,9 +276,7 @@ fn handle_computer_use(enigo: &mut Enigo, args: Value) -> Result<Vec<Value>> {
             };
             enigo.key(key, Direction::Click)?;
             Ok(vec![json!({"type": "text", "text": "success"})])
-        },
-        _ => {
-            Err(anyhow!("Action '{}' is not fully implemented yet", action))
         }
+        _ => Err(anyhow!("Action '{}' is not fully implemented yet", action)),
     }
 }

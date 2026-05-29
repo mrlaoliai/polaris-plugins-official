@@ -9,9 +9,9 @@
   },
   "homepage": "https://polarisagi.online/",
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
-  "license": "AGPL-3.0",
+  "license": "MIT",
   "keywords": ["computer-use", "automation", "screenshot", "mcp"],
-  "mcp_servers": "./.mcp.json",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Computer Use",
     "shortDescription": "Control mouse, keyboard, and capture screenshots.",

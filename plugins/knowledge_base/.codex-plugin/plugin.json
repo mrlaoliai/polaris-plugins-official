@@ -9,9 +9,9 @@
   },
   "homepage": "https://polarisagi.online/",
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
-  "license": "AGPL-3.0",
+  "license": "MIT",
   "keywords": ["knowledge-base", "rag", "file-system", "mcp"],
-  "mcp_servers": "./.mcp.json",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Knowledge Base",
     "shortDescription": "Read local files and list directories for RAG.",

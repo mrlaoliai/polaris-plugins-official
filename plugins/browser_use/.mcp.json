@@ -1,6 +1,8 @@
 {
-  "polarisagi-browser-use": {
-    "command": "npx",
-    "args": ["@playwright/mcp@latest", "--stdio"]
+  "mcpServers": {
+    "polarisagi-browser-use": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--stdio"]
+    }
   }
 }

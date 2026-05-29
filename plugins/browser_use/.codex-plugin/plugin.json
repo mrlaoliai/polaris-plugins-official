@@ -9,7 +9,7 @@
   },
   "homepage": "https://polarisagi.online/",
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
-  "license": "AGPL-3.0",
+  "license": "MIT",
   "keywords": ["browser", "playwright", "web-automation", "mcp"],
   "mcpServers": "./.mcp.json",
   "interface": {
