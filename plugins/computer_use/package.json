@@ -1,6 +1,6 @@
 {
   "name": "polarisagi-computer-mcp",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "TypeScript MCP server for computer automation: screenshot, mouse, keyboard",
   "license": "MIT",
   "author": {
@@ -11,7 +11,7 @@
   "homepage": "https://polarisagi.online/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/polarisagi/polarisagi-plugins-official.git",
+    "url": "git+https://github.com/polarisagi/polarisagi-plugins-official.git",
     "directory": "plugins/computer_use"
   },
   "keywords": ["mcp", "computer-use", "automation", "screenshot", "mouse", "keyboard", "nut-js"],
