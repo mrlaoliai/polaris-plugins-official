@@ -1,7 +1,7 @@
 {
   "name": "polarisagi-plugins-official",
   "interface": {
-    "displayName": "Polaris Official Plugins"
+    "displayName": "PolarisAGI Official Plugins"
   },
   "plugins": [
     {

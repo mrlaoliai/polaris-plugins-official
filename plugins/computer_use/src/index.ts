@@ -210,8 +210,7 @@ async function handleComputerUse(args: any) {
             
         case "double_click":
             await mouse.setPosition(new Point(x, y));
-            await mouse.leftClick();
-            await mouse.leftClick();
+            await mouse.doubleClick(Button.LEFT);
             return [{ type: "text", text: "success" }];
             
         case "left_click_drag":

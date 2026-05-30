@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["-y", "polarisagi-knowledge-base@latest"],
       "env": {
-        "POLARIS_KB_ALLOWED_DIR": ""
+        "POLARISAGI_KB_ALLOWED_DIR": ""
       }
     }
   }

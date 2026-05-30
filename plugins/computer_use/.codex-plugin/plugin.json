@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Computer Use",
     "shortDescription": "Control mouse, keyboard, and capture screenshots.",
-    "longDescription": "Allows the AI agent to control the computer's mouse, keyboard, and capture screenshots using native OS automation APIs. Built in Rust for ultra-low latency. Cross-platform: macOS, Windows, Linux.\n\nRequires: install via install.sh (downloads pre-built binary from GitHub Releases).",
+    "longDescription": "Allows the AI agent to control the computer's mouse, keyboard, and capture screenshots using native OS automation APIs. Built in pure TypeScript with @nut-tree-fork/nut-js. Cross-platform: macOS, Windows, Linux.\n\nRequires: Node.js v18+. Installed automatically via npx — no binary download needed.",
     "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

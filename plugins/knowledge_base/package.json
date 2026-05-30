@@ -1,7 +1,23 @@
 {
   "name": "polarisagi-knowledge-base",
   "version": "0.1.0",
-  "description": "MCP Plugin for reading local knowledge base files",
+  "description": "MCP server for reading local knowledge base files, with path sandboxing for RAG",
+  "license": "MIT",
+  "author": {
+    "name": "mrlaoliai",
+    "email": "polarisagi.online@gmail.com",
+    "url": "https://polarisagi.online/"
+  },
+  "homepage": "https://polarisagi.online/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polarisagi/polarisagi-plugins-official.git",
+    "directory": "plugins/knowledge_base"
+  },
+  "keywords": ["mcp", "knowledge-base", "rag", "file-system", "local-files"],
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
     "dist"
   ],
