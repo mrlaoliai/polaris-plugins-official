@@ -1,6 +1,6 @@
 {
   "name": "polarisagi-computer-mcp",
-  "version": "1.0.19",
+  "version": "1.0.25",
   "description": "TypeScript MCP server for computer automation: screenshot, mouse, keyboard",
   "license": "MIT",
   "author": {

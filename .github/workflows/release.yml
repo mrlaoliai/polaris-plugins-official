@@ -19,6 +19,12 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Sync version from git tag
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          npm version "$VERSION" --no-git-tag-version --prefix plugins/computer_use
+          npm version "$VERSION" --no-git-tag-version --prefix plugins/knowledge_base
+
       - name: Install & build computer_use
         run: |
           cd plugins/computer_use
