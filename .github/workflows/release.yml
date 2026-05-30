@@ -25,6 +25,8 @@ jobs:
           npm install
           npm run build
           npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish knowledge_base
         run: |
@@ -32,6 +34,8 @@ jobs:
           npm install
           npm run build
           npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
