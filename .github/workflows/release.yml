@@ -9,29 +9,30 @@ jobs:
   publish:
     name: Build and Publish NPM Packages
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-      
-      - name: Publish knowledge_base
-        run: |
-          cd plugins/knowledge_base
-          npm install
-          npm run build
-          npm publish --provenance --access public
 
       - name: Publish computer_use
         run: |
           cd plugins/computer_use
           npm install
           npm run build
-          npm publish --provenance --access public
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish knowledge_base
+        run: |
+          cd plugins/knowledge_base
+          npm install
+          npm run build
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
