@@ -12,6 +12,7 @@
   "license": "MIT",
   "keywords": ["browser", "playwright", "web-automation", "mcp"],
   "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Browser Use",
     "shortDescription": "Navigate, click, type, and screenshot web pages.",

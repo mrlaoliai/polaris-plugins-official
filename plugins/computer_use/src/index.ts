@@ -89,38 +89,13 @@ rl.on('line', async (line) => {
         if (req.method === "initialize") {
             sendResult(id, {
                 protocolVersion: "2024-11-05",
-                capabilities: { tools: {}, prompts: {} },
+                capabilities: { tools: {} },
                 serverInfo: {
                     name: "polarisagi-computer-mcp",
                     version: "0.1.0"
                 }
             });
-        } else if (req.method === "prompts/list") {
-            sendResult(id, {
-                prompts: [{
-                    name: "computer_use_guidelines",
-                    description: "Standard system guidelines for AI agents using the computer plugin.",
-                    arguments: []
-                }]
-            });
-        } else if (req.method === "prompts/get") {
-            const promptName = req.params?.name;
-            if (promptName === "computer_use_guidelines") {
-                sendResult(id, {
-                    description: "System Prompt for Computer Use",
-                    messages: [
-                        {
-                            role: "user",
-                            content: {
-                                type: "text",
-                                text: "You have permission to operate a real computer. Please strictly follow these visual recognition and operation guidelines:\n\n1. Visual Feedback Loop: Before executing any click (`left_click`) or input (`type`/`paste`), you MUST call `screenshot` to get the current screen state. Analyze the screenshot carefully to find the absolute coordinates `[x, y]` of the target UI element before clicking.\n\n2. Handling UI States: UI elements may have loading animations or network delays. After interacting with an element (e.g. clicking 'search'), do not assume the action completed instantly. You MUST call `screenshot` again to verify the new UI state (like checking if a dropdown menu appeared) before proceeding.\n\n3. Text Input Rules: When inputting Chinese characters or long text, you MUST prioritize the `paste` action. This bypasses input method editor (IME) interference and prevents text truncation. Only use `type` or `key` for pure English characters or shortcuts.\n\n4. Error Recovery: If the screenshot does not match your expectations (e.g. click failed or text was typed in the wrong place), analyze the screen, use `mouse_move` to move the focus away, or send `key: escape` to cancel the current state, and retry."
-                            }
-                        }
-                    ]
-                });
-            } else {
-                sendError(id, -32602, "Prompt not found");
-            }
+
         } else if (req.method === "tools/list") {
             sendResult(id, {
                 tools: [{

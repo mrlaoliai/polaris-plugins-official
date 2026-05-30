@@ -12,6 +12,7 @@
   "license": "MIT",
   "keywords": ["computer-use", "automation", "screenshot", "mcp"],
   "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Computer Use",
     "shortDescription": "Control mouse, keyboard, and capture screenshots.",
