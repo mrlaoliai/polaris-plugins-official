@@ -2,6 +2,9 @@
   "name": "polarisagi-computer-mcp",
   "version": "0.1.0",
   "description": "TypeScript MCP server for computer automation",
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "bin": {
     "polarisagi-computer-mcp": "dist/index.js"

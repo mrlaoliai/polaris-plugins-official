@@ -2,6 +2,9 @@
   "name": "polarisagi-knowledge-base",
   "version": "0.1.0",
   "description": "MCP Plugin for reading local knowledge base files",
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "bin": {
     "polarisagi-knowledge-base": "./dist/index.js"
