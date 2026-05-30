@@ -19,16 +19,16 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
       
-      - name: Publish computer_use
+      - name: Publish knowledge_base
         run: |
-          cd plugins/computer_use
+          cd plugins/knowledge_base
           npm install
           npm run build
           npm publish --provenance --access public
 
-      - name: Publish knowledge_base
+      - name: Publish computer_use
         run: |
-          cd plugins/knowledge_base
+          cd plugins/computer_use
           npm install
           npm run build
           npm publish --provenance --access public
