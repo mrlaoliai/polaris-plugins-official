@@ -1,6 +1,6 @@
 {
   "name": "polarisagi-knowledge-base",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "MCP Plugin for reading local knowledge base files, with path sandboxing for RAG",
   "license": "MIT",
   "author": {
