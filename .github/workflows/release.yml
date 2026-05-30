@@ -19,20 +19,28 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Install & build computer_use
+        run: |
+          cd plugins/computer_use
+          npm ci
+          npm run build
+
       - name: Publish computer_use
         run: |
           cd plugins/computer_use
-          npm install
-          npm run build
           npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Install & build knowledge_base
+        run: |
+          cd plugins/knowledge_base
+          npm ci
+          npm run build
+
       - name: Publish knowledge_base
         run: |
           cd plugins/knowledge_base
-          npm install
-          npm run build
           npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
