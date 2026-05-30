@@ -1,7 +1,7 @@
 {
   "name": "polarisagi-browser-use",
   "version": "1.0.0",
-  "description": "Control a browser to navigate, click, fill forms, and capture screenshots via Playwright MCP.",
+  "description": "Control a browser via DOM extraction and precise element interaction (DOM/Accessibility Tree instead of screenshots).",
   "author": {
     "name": "mrlaoliai",
     "email": "polarisagi.online@gmail.com",
@@ -10,13 +10,13 @@
   "homepage": "https://polarisagi.online/",
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
   "license": "MIT",
-  "keywords": ["browser", "playwright", "web-automation", "mcp"],
+  "keywords": ["browser", "playwright", "dom-extraction", "accessibility-tree", "mcp"],
   "mcpServers": "./.mcp.json",
   "skills": "./skills/",
   "interface": {
-    "displayName": "Browser Use",
-    "shortDescription": "Navigate, click, type, and screenshot web pages.",
-    "longDescription": "Browser automation via the official Playwright MCP server. Supports navigation, DOM interaction, form filling, and screenshot capture.\n\nRequires: Node.js (npx auto-downloads @playwright/mcp on first use).",
+    "displayName": "Browser Use (DOM Extraction)",
+    "shortDescription": "Navigate, extract DOM structure, and precisely interact with web elements.",
+    "longDescription": "Advanced browser automation via custom Playwright MCP server. Operates using DOM extraction and unique component IDs instead of pixel coordinates, drastically reducing hallucination.\n\nRequires: Node.js (runs custom DOM extractor on start).",
     "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

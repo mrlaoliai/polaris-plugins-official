@@ -1,0 +1,14 @@
+{
+  "name": "browser_use",
+  "version": "1.0.0",
+  "description": "Custom Browser Use MCP Server with DOM extraction",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "playwright": "^1.44.0"
+  }
+}
