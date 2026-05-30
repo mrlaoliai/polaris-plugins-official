@@ -22,8 +22,8 @@ jobs:
       - name: Sync version from git tag
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          npm version "$VERSION" --no-git-tag-version --prefix plugins/computer_use
-          npm version "$VERSION" --no-git-tag-version --prefix plugins/knowledge_base
+          npm pkg set version="$VERSION" --prefix plugins/computer_use
+          npm pkg set version="$VERSION" --prefix plugins/knowledge_base
 
       - name: Install & build computer_use
         run: |
