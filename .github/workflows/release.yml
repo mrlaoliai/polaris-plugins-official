@@ -1,7 +1,4 @@
-name: Release Plugins
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+name: Publish to NPM
 
 on:
   push:
@@ -9,128 +6,35 @@ on:
       - 'v*'
 
 jobs:
-  build-go:
-    name: Build Go Plugins
+  publish:
+    name: Build and Publish NPM Packages
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goos: [linux, windows, darwin]
-        goarch: [amd64, arm64]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-node@v4
         with:
-          go-version: '1.22'
-          cache-dependency-path: plugins/knowledge_base/go.sum
-      - name: Build polarisagi-knowledge-base
-        env:
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
-          PLUGIN_OS: ${{ matrix.goos }}
-          PLUGIN_ARCH: ${{ matrix.goarch }}
-        run: |
-          cd plugins/knowledge_base
-          EXT=""
-          if [ "$PLUGIN_OS" = "windows" ]; then EXT=".exe"; fi
-          go build -o ../../polarisagi-knowledge-base_${PLUGIN_OS}_${PLUGIN_ARCH}${EXT} .
-      - name: Upload Go Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: go-binaries-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: polarisagi-knowledge-base_*
-          retention-days: 1
-
-  build-rust:
-    name: Build Rust Plugins
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            os_name: linux
-            arch_name: amd64
-          - os: ubuntu-24.04-arm
-            target: aarch64-unknown-linux-gnu
-            os_name: linux
-            arch_name: arm64
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            os_name: darwin
-            arch_name: amd64
-          - os: macos-latest
-            target: aarch64-apple-darwin
-            os_name: darwin
-            arch_name: arm64
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            os_name: windows
-            arch_name: amd64
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: plugins/computer_use
-          cache-on-failure: true
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libxdo-dev libx11-dev libxtst-dev libxcb1-dev \
-            libxkbcommon-dev libwayland-dev libpipewire-0.3-dev \
-            libspa-0.2-dev libclang-dev libegl1-mesa-dev libgbm-dev
-      - name: Install Rust Toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-      - name: Build polarisagi-computer-mcp
-        env:
-          CARGO_TARGET: ${{ matrix.target }}
-          CARGO_INCREMENTAL: "0"
-        shell: bash
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Publish computer_use
         run: |
           cd plugins/computer_use
-          cargo build --release --target "$CARGO_TARGET"
-      - name: Stage Binary (Unix)
-        if: runner.os != 'Windows'
+          npm install
+          npm run build
+          npm publish --access public
         env:
-          CARGO_TARGET: ${{ matrix.target }}
-          PLUGIN_OS: ${{ matrix.os_name }}
-          PLUGIN_ARCH: ${{ matrix.arch_name }}
-        run: |
-          cp "plugins/computer_use/target/${CARGO_TARGET}/release/polarisagi-computer-mcp" \
-             "./polarisagi-computer-mcp_${PLUGIN_OS}_${PLUGIN_ARCH}"
-      - name: Stage Binary (Windows)
-        if: runner.os == 'Windows'
-        env:
-          CARGO_TARGET: ${{ matrix.target }}
-          PLUGIN_OS: ${{ matrix.os_name }}
-          PLUGIN_ARCH: ${{ matrix.arch_name }}
-        run: |
-          copy "plugins\computer_use\target\$env:CARGO_TARGET\release\polarisagi-computer-mcp.exe" `
-               "polarisagi-computer-mcp_${env:PLUGIN_OS}_${env:PLUGIN_ARCH}.exe"
-      - name: Upload Rust Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: rust-binaries-${{ matrix.os_name }}-${{ matrix.arch_name }}
-          path: polarisagi-computer-mcp_*
-          retention-days: 1
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  release:
-    name: Publish Release
-    needs: [build-go, build-rust]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          merge-multiple: true
+      - name: Publish knowledge_base
+        run: |
+          cd plugins/knowledge_base
+          npm install
+          npm run build
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/*
           generate_release_notes: true
