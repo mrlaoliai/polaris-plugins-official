@@ -25,7 +25,7 @@ Configure your AI agent with the following MCP server setting, replacing `/your/
       "command": "npx",
       "args": ["-y", "polarisagi-knowledge-base@latest"],
       "env": {
-        "POLARIS_KB_ALLOWED_DIR": "/your/allowed/dir"
+        "POLARISAGI_KB_ALLOWED_DIR": "/your/allowed/dir"
       }
     }
   }
