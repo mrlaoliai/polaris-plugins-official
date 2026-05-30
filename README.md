@@ -1,4 +1,4 @@
-# Polaris Plugins Official
+# PolarisAGI Plugins Official
 
 🌎 [English](README.md) | 🇨🇳 [中文](README_zh.md)
 
@@ -6,7 +6,7 @@
 [![MCP](https://img.shields.io/badge/Anthropic-MCP-blue.svg)](https://modelcontextprotocol.io)
 [![Codex Plugin](https://img.shields.io/badge/OpenAI-Codex_Plugin-black.svg)](https://developers.openai.com/codex/plugins)
 
-**Polaris Plugins Official** is the official extension library for [Polaris AI Agent](https://github.com/polarisagi/polarisagi-harness), fully compatible with:
+**PolarisAGI Plugins Official** is the official extension library for [PolarisAGI AI Agent](https://github.com/polarisagi/polarisagi-harness), fully compatible with:
 
 - **Anthropic MCP** (Model Context Protocol) — stdio JSON-RPC 2.0, protocol version `2024-11-05`
 - **OpenAI Codex Plugin** (`.codex-plugin/plugin.json` + `.mcp.json`) — current standard
@@ -17,11 +17,11 @@
 
 ## Plugins
 
-### 1. [Computer Use (Rust)](plugins/computer_use)
+### 1. [Computer Use (TypeScript)](plugins/computer_use)
 
 **Capabilities**: Screenshot, mouse move/click/drag, keyboard input  
-**Drivers**: `enigo` + `xcap`  
-**Highlights**: Native compiled, ultra-low latency, cross-platform (macOS / Windows / Linux)
+**Drivers**: `@nut-tree-fork/nut-js`  
+**Highlights**: Pure TypeScript, natively calls OS APIs, cross-platform (macOS / Windows / Linux)
 
 ### 2. [Browser Use](plugins/browser_use)
 
@@ -29,24 +29,19 @@
 **Powered by**: [Playwright MCP](https://github.com/microsoft/playwright-mcp) (official Microsoft)  
 **Highlights**: No binary to install — `npx` downloads automatically; Node.js required
 
-### 3. [Knowledge Base (Go)](plugins/knowledge_base)
+### 3. [Knowledge Base (TypeScript)](plugins/knowledge_base)
 
 **Capabilities**: List directory contents, read file content for RAG  
-**Drivers**: `github.com/mark3labs/mcp-go`  
-**Highlights**: Single binary, zero extra deps; `POLARIS_KB_ALLOWED_DIR` env var for path sandboxing
+**Drivers**: Native Node.js `fs` module  
+**Highlights**: Pure TypeScript, zero external dependencies; `POLARISAGI_KB_ALLOWED_DIR` env var for path sandboxing
 
 ---
 
 ## Installation
 
-### Step 1: Install binaries (computer_use + knowledge_base)
+### Step 1: Prerequisites
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/polarisagi/polarisagi-plugins-official/main/install.sh | bash
-```
-
-Or download manually from [GitHub Releases](https://github.com/polarisagi/polarisagi-plugins-official/releases).  
-Available platforms: `linux/amd64`, `linux/arm64`, `darwin/amd64`, `darwin/arm64`, `windows/amd64`.
+Ensure you have **Node.js** (v18 or newer) installed on your system. No manual binary downloads are required!
 
 ### Step 2: Configure your agent
 
@@ -58,15 +53,17 @@ Add to `~/.claude.json`:
 {
   "mcpServers": {
     "polarisagi-computer-use": {
-      "command": "polarisagi-computer-mcp"
+      "command": "npx",
+      "args": ["-y", "polarisagi-computer-mcp@latest"]
     },
     "polarisagi-browser-use": {
       "command": "npx",
       "args": ["@playwright/mcp@latest", "--stdio"]
     },
     "polarisagi-knowledge-base": {
-      "command": "polarisagi-knowledge-base",
-      "env": { "POLARIS_KB_ALLOWED_DIR": "/your/allowed/dir" }
+      "command": "npx",
+      "args": ["-y", "polarisagi-knowledge-base@latest"],
+      "env": { "POLARISAGI_KB_ALLOWED_DIR": "/your/allowed/dir" }
     }
   }
 }
@@ -78,11 +75,11 @@ Add to `~/.claude.json`:
 codex plugin marketplace add polarisagi/polarisagi-plugins-official --sparse .agents/plugins
 ```
 
-Then browse and install from the **Polaris Official Plugins** marketplace in the Codex App.
+Then browse and install from the **PolarisAGI Official Plugins** marketplace in the Codex App.
 
-#### Polaris AI Agent (automatic)
+#### PolarisAGI AI Agent (automatic)
 
-Polaris `pkg/extensions/marketplace/` auto-discovers and installs plugins from this repo. Learn more at [polarisagi.online](https://polarisagi.online/).
+PolarisAGI `pkg/extensions/marketplace/` auto-discovers and installs plugins from this repo. Learn more at [polarisagi.online](https://polarisagi.online/).
 
 ---
 
@@ -92,22 +89,20 @@ Polaris `pkg/extensions/marketplace/` auto-discovers and installs plugins from t
 plugins/
   computer_use/
     .codex-plugin/plugin.json   # Codex plugin manifest
-    .mcp.json                    # MCP server config (command: polarisagi-computer-mcp)
-    src/main.rs                  # Rust MCP server
-    Cargo.toml
+    .mcp.json                    # MCP server config (command: npx)
+    src/index.ts                 # TypeScript MCP server
+    package.json
   browser_use/
     .codex-plugin/plugin.json
     .mcp.json                    # MCP server config (command: npx @playwright/mcp)
   knowledge_base/
     .codex-plugin/plugin.json
-    .mcp.json                    # MCP server config (command: polarisagi-knowledge-base)
-    main.go                      # Go MCP server
-    go.mod
+    .mcp.json                    # MCP server config (command: npx)
+    src/index.ts                 # TypeScript MCP server
+    package.json
 
 .agents/plugins/
   marketplace.json               # Codex repo-level marketplace catalog
-
-install.sh                       # Install script (downloads binaries from GitHub Releases)
 ```
 
 ## License
@@ -118,12 +113,12 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 If this project helps you, consider sponsoring the author to support independent development! ☕️
 
-## About Polaris
+## About PolarisAGI
 
-**Polaris** is an open-source self-hosted AI Agent project.
+**PolarisAGI** is an open-source self-hosted AI Agent project.
 
 - **Official Website**: [polarisagi.online](https://polarisagi.online/)
-- **GitHub**: [github.com/polarisagi/polaris-harness](https://github.com/polarisagi/polarisagi-harness)
+- **GitHub**: [github.com/polarisagi/polarisagi-harness](https://github.com/polarisagi/polarisagi-harness)
 - **Contact**: polarisagi.online@gmail.com
 
 ## Author

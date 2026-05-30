@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "polarisagi-knowledge-base": {
-      "command": "polarisagi-knowledge-base",
-      "args": [],
+      "command": "npx",
+      "args": ["-y", "polarisagi-knowledge-base@latest"],
       "env": {
         "POLARIS_KB_ALLOWED_DIR": ""
       }

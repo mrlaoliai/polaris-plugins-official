@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Knowledge Base",
     "shortDescription": "Read local files and list directories for RAG.",
-    "longDescription": "Allows the AI agent to scan the local file system and read document content for Retrieval-Augmented Generation. Built in Go with zero extra runtime dependencies.\n\nSecurity: Set POLARIS_KB_ALLOWED_DIR env var to restrict accessible paths.\nRequires: install via install.sh (downloads pre-built binary from GitHub Releases).",
+    "longDescription": "Allows the AI agent to scan the local file system and read document content for Retrieval-Augmented Generation. Built in Go with zero extra runtime dependencies.\n\nSecurity: Set POLARISAGI_KB_ALLOWED_DIR env var to restrict accessible paths.\nRequires: install via install.sh (downloads pre-built binary from GitHub Releases).",
     "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read"],

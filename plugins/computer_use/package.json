@@ -1,0 +1,21 @@
+{
+  "name": "polarisagi-computer-mcp",
+  "version": "0.1.0",
+  "description": "TypeScript MCP server for computer automation",
+  "main": "dist/index.js",
+  "bin": {
+    "polarisagi-computer-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@nut-tree-fork/nut-js": "^4.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
