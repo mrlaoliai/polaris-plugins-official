@@ -16,7 +16,7 @@
   "interface": {
     "displayName": "Browser Use (DOM Extraction)",
     "shortDescription": "Navigate, extract DOM structure, and precisely interact with web elements.",
-    "longDescription": "Advanced browser automation via custom Playwright MCP server. Operates using DOM extraction and unique component IDs instead of pixel coordinates, drastically reducing hallucination.\n\nRequires: Node.js (runs custom DOM extractor on start).",
+    "longDescription": "Advanced browser automation via custom Python MCP server. Operates using DOM extraction and unique component IDs instead of pixel coordinates, drastically reducing hallucination.\n\nRequires: Python.",
     "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

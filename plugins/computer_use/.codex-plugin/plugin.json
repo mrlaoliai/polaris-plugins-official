@@ -1,7 +1,7 @@
 {
   "name": "polarisagi-computer-use",
   "version": "1.0.0",
-  "description": "Control the computer using keyboard, mouse inputs, and capture screenshots via MCP.",
+  "description": "Universal desktop automation. Control apps (e.g., WeChat, browsers), use keyboard/mouse, capture screenshots, and send chat messages natively via MCP.",
   "author": {
     "name": "mrlaoliai",
     "email": "polarisagi.online@gmail.com",
@@ -10,13 +10,13 @@
   "homepage": "https://polarisagi.online/",
   "repository": "https://github.com/polarisagi/polarisagi-plugins-official",
   "license": "MIT",
-  "keywords": ["computer-use", "automation", "screenshot", "mcp"],
+  "keywords": ["computer-use", "automation", "desktop-apps", "wechat", "screenshot", "mcp"],
   "mcpServers": "./.mcp.json",
   "skills": "./skills/",
   "interface": {
     "displayName": "Computer Use",
-    "shortDescription": "Control mouse, keyboard, and capture screenshots.",
-    "longDescription": "Allows the AI agent to control the computer's mouse, keyboard, and capture screenshots using native OS automation APIs. Built in pure TypeScript with @nut-tree-fork/nut-js. Cross-platform: macOS, Windows, Linux.\n\nRequires: Node.js v18+. Installed automatically via npx — no binary download needed.",
+    "shortDescription": "Automate desktop apps, send WeChat/chat messages, control mouse/keyboard.",
+    "longDescription": "Allows the AI agent to automate desktop applications, send messages via chat apps (like WeChat, Slack, DingTalk), control the computer's mouse and keyboard, and capture screenshots using native OS automation APIs. Built in Python. Cross-platform: macOS, Windows, Linux.",
     "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
@@ -24,9 +24,9 @@
     "privacyPolicyURL": "https://github.com/polarisagi/polarisagi-plugins-official",
     "termsOfServiceURL": "https://github.com/polarisagi/polarisagi-plugins-official/blob/main/LICENSE",
     "defaultPrompt": [
+      "Open WeChat and send a message to '小伙伴'.",
       "Take a screenshot of the current screen.",
-      "Click on the button at coordinates [100, 200].",
-      "Type 'Hello World' into the active window."
+      "Click on the button at coordinates [100, 200]."
     ]
   }
 }

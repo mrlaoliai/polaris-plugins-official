@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Knowledge Base",
     "shortDescription": "Read local files and list directories for RAG.",
-    "longDescription": "Allows the AI agent to scan the local file system and read document content for Retrieval-Augmented Generation. Built in pure TypeScript with zero external dependencies.\n\nSecurity: Set POLARISAGI_KB_ALLOWED_DIR env var to restrict accessible paths.\nRequires: Node.js v18+. Installed automatically via npx — no binary download needed.",
+    "longDescription": "Allows the AI agent to scan the local file system and read document content for Retrieval-Augmented Generation. Built in pure Python with zero external dependencies.\n\nSecurity: Set POLARISAGI_KB_ALLOWED_DIR env var to restrict accessible paths.\nRequires: Python 3.10+.",
     "developerName": "mrlaoliai",
     "category": "Productivity",
     "capabilities": ["Read"],
