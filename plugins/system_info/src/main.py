@@ -12,31 +12,6 @@ import time
 import shutil
 
 
-def handle_get_system_context(args):
-    """Retrieve basic system and hardware environment context."""
-    try:
-        lang = locale.getlocale()[0] or ""
-    except Exception:
-        lang = ""
-
-    total, used, free = shutil.disk_usage("/")
-    
-    return [{
-        "type": "text", 
-        "text": json.dumps({
-            "os_name": platform.system(),
-            "os_release": platform.release(),
-            "os_version": platform.version(),
-            "architecture": platform.machine(),
-            "processor": platform.processor(),
-            "locale": lang,
-            "timezone": time.tzname[time.daylight],
-            "cpu_cores": os.cpu_count(),
-            "disk_free_gb": round(free / (1024**3), 2),
-            "disk_total_gb": round(total / (1024**3), 2)
-        }, indent=2, ensure_ascii=False)
-    }]
-
 
 def handle_check_app_installed(args):
     """Check if an application exists in standard OS installation paths."""
@@ -97,18 +72,6 @@ def handle_check_app_installed(args):
 
 TOOLS = [
     {
-        "name": "get_system_context",
-        "description": (
-            "Retrieve system environment information including OS version, architecture, "
-            "locale, timezone, CPU cores, and free disk space. Use this to adapt "
-            "behavior based on the operating system and language."
-        ),
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-        }
-    },
-    {
         "name": "check_app_installed",
         "description": (
             "Check if a specific application is installed on the computer. "
@@ -158,10 +121,7 @@ def main():
                 tool_name = params.get("name")
                 args = params.get("arguments", {})
                 
-                if tool_name == "get_system_context":
-                    result = handle_get_system_context(args)
-                    _send_result(req_id, {"content": result})
-                elif tool_name == "check_app_installed":
+                if tool_name == "check_app_installed":
                     result = handle_check_app_installed(args)
                     _send_result(req_id, {"content": result})
                 else:
