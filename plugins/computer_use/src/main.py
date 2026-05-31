@@ -247,8 +247,11 @@ def handle_click_element_by_name(args):
             swift_exe = os.path.join(os.path.dirname(__file__), "find_text_on_screen")
             if not os.path.exists(swift_exe):
                 subprocess.run(["swiftc", swift_src, "-o", swift_exe], check=True)
+            import tempfile
+            import uuid
+            tmp_path = os.path.join(tempfile.gettempdir(), f"ocr_temp_{uuid.uuid4().hex}.png")
             with mss.MSS() as sct:
-                filename = sct.shot(output="ocr_temp.png")
+                filename = sct.shot(output=tmp_path)
             try:
                 ocr_out = subprocess.check_output(
                     [swift_exe, filename, elem_name], timeout=15
@@ -526,12 +529,18 @@ def handle_computer(args):
         x, y = int(args["coordinate"][0]), int(args["coordinate"][1])
 
     if action == "screenshot":
-        with mss.MSS() as sct:
-            filename = sct.shot(output="screenshot.png")
-            with open(filename, "rb") as f:
-                b64 = base64.b64encode(f.read()).decode()
-            os.remove(filename)
-            return [{"type": "image", "data": b64, "mimeType": "image/png"}]
+        import tempfile
+        import uuid
+        tmp_path = os.path.join(tempfile.gettempdir(), f"screenshot_{uuid.uuid4().hex}.png")
+        try:
+            with mss.MSS() as sct:
+                filename = sct.shot(output=tmp_path)
+                with open(filename, "rb") as f:
+                    b64 = base64.b64encode(f.read()).decode()
+                return [{"type": "image", "data": b64, "mimeType": "image/png"}]
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
     elif action == "mouse_move":   mouse.position = (x, y)
     elif action == "left_click":   mouse.position = (x, y); mouse.click(Button.left)
     elif action == "right_click":  mouse.position = (x, y); mouse.click(Button.right)
@@ -622,7 +631,7 @@ def main():
         try:
             if method == "initialize":
                 _send_result(req_id, {
-                    "protocolVersion": "2024-11-05",
+                    "protocolVersion": "2025-11-25",
                     "capabilities": {"tools": {}},
                     "serverInfo": {"name": "polarisagi-computer-mcp", "version": "1.0.0"},
                 })

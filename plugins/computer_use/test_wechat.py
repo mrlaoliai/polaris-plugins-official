@@ -4,7 +4,7 @@ import json
 import subprocess
 
 def run_test():
-    cmd = [sys.executable, "src/main.py"]
+    cmd = ["uv", "run", "src/main.py"]
     req = {
         "jsonrpc": "2.0",
         "id": 1,
@@ -14,8 +14,8 @@ def run_test():
             "arguments": {
                 "action": "send_message_to",
                 "app": "微信",
-                "contact_name": "小伙子",
-                "message": "这是一条测试消息"
+                "contact_name": "刘园园",
+                "message": "你好，小主！   这是来自老李的 ai 发送的测试消息！"
             }
         }
     }

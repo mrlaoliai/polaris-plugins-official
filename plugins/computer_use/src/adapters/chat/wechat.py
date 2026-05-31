@@ -266,11 +266,6 @@ class WeChatAdapter(BaseAdapter):
                 log("[4A] OCR: screenshot failed, skipping OCR")
                 return None
 
-            # Save a copy to Desktop for inspection
-            import shutil as _sh
-            debug_path = os.path.expanduser("~/Desktop/wechat_ocr_debug.png")
-            _sh.copy2(tmp, debug_path)
-            log(f"[4A] 截图已保存: {debug_path}  (可在桌面查看)")
             log(f"[4A] OCR: window offset ({x_off},{y_off})")
 
             # ── try each section header in order ───────────────────────────
