@@ -1,8 +1,23 @@
 {
-  "name": "browser_use",
-  "version": "1.0.0",
-  "description": "Custom Browser Use MCP Server with DOM extraction",
+  "name": "polarisagi-browser-use",
+  "version": "1.0.29",
+  "description": "PolarisAGI Browser Use MCP Server with DOM extraction",
+  "author": {
+    "name": "mrlaoliai",
+    "email": "polarisagi.online@gmail.com",
+    "url": "https://polarisagi.online/"
+  },
+  "homepage": "https://polarisagi.online/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polarisagi/polarisagi-plugins-official.git",
+    "directory": "plugins/browser_use"
+  },
+  "keywords": ["mcp", "browser-use", "playwright", "automation", "polarisagi"],
   "main": "src/index.js",
+  "bin": {
+    "polarisagi-browser-use": "./src/index.js"
+  },
   "type": "module",
   "scripts": {
     "start": "node src/index.js"
