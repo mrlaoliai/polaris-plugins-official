@@ -1,4 +1,4 @@
-name: Publish to NPM
+name: GitHub Release
 
 on:
   push:
@@ -6,52 +6,14 @@ on:
       - 'v*'
 
 jobs:
-  publish:
-    name: Build and Publish NPM Packages
+  release:
+    name: Create Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Sync version from git tag
-        run: |
-          VERSION=${GITHUB_REF_NAME#v}
-          npm pkg set version="$VERSION" --prefix plugins/knowledge_base
-          npm pkg set version="$VERSION" --prefix plugins/browser_use
-
-
-
-      - name: Install & build knowledge_base
-        run: |
-          cd plugins/knowledge_base
-          npm ci
-          npm run build
-
-      - name: Publish knowledge_base
-        run: |
-          cd plugins/knowledge_base
-          npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Install & build browser_use
-        run: |
-          cd plugins/browser_use
-          npm ci
-          npm run build || echo "No build script"
-
-      - name: Publish browser_use
-        run: |
-          cd plugins/browser_use
-          npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

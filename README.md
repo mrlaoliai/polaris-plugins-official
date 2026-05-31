@@ -17,23 +17,23 @@
 
 ## Plugins
 
-### 1. [Computer Use (TypeScript)](plugins/computer_use)
+### 1. [Computer Use (Python)](plugins/computer_use)
 
 **Capabilities**: Screenshot, mouse move/click/drag, keyboard input  
-**Drivers**: `@nut-tree-fork/nut-js`  
-**Highlights**: Pure TypeScript, natively calls OS APIs, cross-platform (macOS / Windows / Linux)
+**Drivers**: `mss`, `pynput`, `pywinauto`  
+**Highlights**: Pure Python, natively calls OS APIs, cross-platform (macOS / Windows / Linux)
 
-### 2. [Browser Use](plugins/browser_use)
+### 2. [Browser Use (Python)](plugins/browser_use)
 
 **Capabilities**: Navigate URLs, click elements, fill forms, capture screenshots  
-**Powered by**: [Playwright MCP](https://github.com/microsoft/playwright-mcp) (official Microsoft)  
-**Highlights**: No binary to install — `npx` downloads automatically; Node.js required
+**Powered by**: Python and `uv`  
+**Highlights**: Automate browsers directly from Python
 
-### 3. [Knowledge Base (TypeScript)](plugins/knowledge_base)
+### 3. [Knowledge Base (Python)](plugins/knowledge_base)
 
 **Capabilities**: List directory contents, read file content for RAG  
-**Drivers**: Native Node.js `fs` module  
-**Highlights**: Pure TypeScript, zero external dependencies; `POLARISAGI_KB_ALLOWED_DIR` env var for path sandboxing
+**Drivers**: Native Python `os` and `pathlib` modules  
+**Highlights**: Pure Python, zero external dependencies; `POLARISAGI_KB_ALLOWED_DIR` env var for path sandboxing
 
 ---
 
@@ -41,7 +41,7 @@
 
 ### Step 1: Prerequisites
 
-Ensure you have **Node.js** (v18 or newer) installed on your system. No manual binary downloads are required!
+Ensure you have **Python 3.10+** and **uv** (Astral's fast Python package manager) installed on your system.
 
 ### Step 2: Configure your agent
 
@@ -53,16 +53,16 @@ Add to `~/.claude.json`:
 {
   "mcpServers": {
     "polarisagi-computer-use": {
-      "command": "npx",
-      "args": ["-y", "polarisagi-computer-mcp@latest"]
+      "command": "uv",
+      "args": ["run", "/absolute/path/to/polarisagi-plugins-official/plugins/computer_use/src/main.py"]
     },
     "polarisagi-browser-use": {
-      "command": "npx",
-      "args": ["@playwright/mcp@latest", "--stdio"]
+      "command": "uv",
+      "args": ["run", "/absolute/path/to/polarisagi-plugins-official/plugins/browser_use/src/main.py"]
     },
     "polarisagi-knowledge-base": {
-      "command": "npx",
-      "args": ["-y", "polarisagi-knowledge-base@latest"],
+      "command": "uv",
+      "args": ["run", "/absolute/path/to/polarisagi-plugins-official/plugins/knowledge_base/src/main.py"],
       "env": { "POLARISAGI_KB_ALLOWED_DIR": "/your/allowed/dir" }
     }
   }
@@ -89,17 +89,19 @@ PolarisAGI `pkg/extensions/marketplace/` auto-discovers and installs plugins fro
 plugins/
   computer_use/
     .codex-plugin/plugin.json   # Codex plugin manifest
-    .mcp.json                    # MCP server config (command: npx)
-    src/index.ts                 # TypeScript MCP server
-    package.json
+    .mcp.json                    # MCP server config (command: uv)
+    src/main.py                  # Python MCP server
+    pyproject.toml
   browser_use/
     .codex-plugin/plugin.json
-    .mcp.json                    # MCP server config (command: npx @playwright/mcp)
+    .mcp.json                    # MCP server config (command: uv)
+    src/main.py
+    pyproject.toml
   knowledge_base/
     .codex-plugin/plugin.json
-    .mcp.json                    # MCP server config (command: npx)
-    src/index.ts                 # TypeScript MCP server
-    package.json
+    .mcp.json                    # MCP server config (command: uv)
+    src/main.py                  # Python MCP server
+    pyproject.toml
 
 .agents/plugins/
   marketplace.json               # Codex repo-level marketplace catalog
