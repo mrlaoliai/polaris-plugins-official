@@ -37,6 +37,7 @@ async function ensurePage() {
       ];
 
       let port = 9222;
+      let endpointUrl = `http://127.0.0.1:${port}`;
       for (const portFile of portFiles) {
         if (fs.existsSync(portFile)) {
           const content = fs.readFileSync(portFile, 'utf8');
@@ -45,6 +46,10 @@ async function ensurePage() {
             const parsedPort = parseInt(lines[0].trim(), 10);
             if (!isNaN(parsedPort)) {
               port = parsedPort;
+              endpointUrl = `http://127.0.0.1:${port}`;
+              if (lines.length > 1 && lines[1].trim().startsWith('/devtools/')) {
+                endpointUrl = `ws://127.0.0.1:${port}${lines[1].trim()}`;
+              }
               break;
             }
           }
@@ -52,23 +57,31 @@ async function ensurePage() {
       }
 
       // 连接现有的 Chrome 或 Edge
-      browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`);
+      browser = await chromium.connectOverCDP(endpointUrl);
       const contexts = browser.contexts();
       const context = contexts.length > 0 ? contexts[0] : await browser.newContext();
-      const pages = context.pages();
-      page = pages.length > 0 ? pages[0] : await context.newPage();
+      
+      // 监听新标签页的开启，并自动切换控制权
+      context.on('page', newPage => {
+        console.log("New tab opened, switching to it.");
+        page = newPage;
+      });
+
+      // 总是打开新标签页，避免覆盖用户当前正在浏览的页面
+      page = await context.newPage();
     } catch (e) {
-      // 提供 Chrome 和 Edge 双平台的 UX 提示
-      throw new Error(
-        "Remote Debugging Required (需要开启远程调试)\n\n" +
-        "To use browser tools, you need to enable remote debugging / 为了使用智能体的浏览器控制功能，您需要手动开启远程调试:\n\n" +
-        "For Google Chrome (谷歌浏览器):\n" +
-        "Navigate to chrome://inspect/#remote-debugging and enable 'Allow remote debugging for this browser instance'.\n" +
-        "(请在地址栏输入 chrome://inspect/#remote-debugging ，然后勾选 'Allow remote debugging for this browser instance' 选项)\n\n" +
-        "For Microsoft Edge (微软 Edge 浏览器):\n" +
-        "Navigate to edge://inspect/#remote-debugging and enable 'Allow remote debugging for this browser instance'.\n" +
-        "(请在地址栏输入 edge://inspect/#remote-debugging ，然后勾选 'Allow remote debugging for this browser instance' 选项)"
-      );
+      console.log("Failed to connect via CDP, launching a new browser instance...", e.message);
+      // Fallback to launching a new visible browser instead of throwing an error
+      browser = await chromium.launch({ headless: false });
+      const contexts = browser.contexts();
+      const context = contexts.length > 0 ? contexts[0] : await browser.newContext();
+      
+      context.on('page', newPage => {
+        console.log("New tab opened, switching to it.");
+        page = newPage;
+      });
+
+      page = await context.newPage();
     }
   }
   return page;
@@ -79,7 +92,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: "navigate",
-        description: "Navigate to a URL and wait for it to load.",
+        description: "Navigate to a URL and wait for it to load. The URL must be a full, valid URL starting with http:// or https://",
         inputSchema: {
           type: "object",
           properties: {
@@ -90,7 +103,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "get_interactive_dom",
-        description: "Get a simplified interactive DOM tree (Accessibility Tree). Returns interactive elements with a unique 'polaris-id'. Use this to see what you can interact with instead of taking screenshots.",
+        description: "Get a simplified interactive DOM tree. Returns ONLY interactive elements (links, buttons, inputs) with a unique 'polaris-id'. Use this ONLY when you need to find an element to click or fill. To read the main text content of the page, use get_page_content instead.",
         inputSchema: {
           type: "object",
           properties: {},
@@ -98,13 +111,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "action_by_id",
-        description: "Perform an action (click, fill, hover) on an element using its 'polaris-id' obtained from get_interactive_dom.",
+        description: "Perform an action on an element using its 'polaris-id' obtained from get_interactive_dom. 'fill' clears the input first. 'fill_and_enter' is highly recommended for search boxes to automatically submit.",
         inputSchema: {
           type: "object",
           properties: {
             id: { type: "number", description: "The polaris-id of the element" },
-            action: { type: "string", enum: ["click", "fill", "hover"] },
-            text: { type: "string", description: "Text to fill (if action is fill)" },
+            action: { type: "string", enum: ["click", "fill", "fill_and_enter", "hover"] },
+            text: { type: "string", description: "Text to fill (if action is fill or fill_and_enter)" },
           },
           required: ["id", "action"],
         },
@@ -118,6 +131,38 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             direction: { type: "string", enum: ["down", "up"] },
           },
           required: ["direction"],
+        },
+      },
+      {
+        name: "go_back",
+        description: "Go back to the previous page in the browser history.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "close_tab",
+        description: "Close the current active tab and switch to the previous one. Use this when you are done reading a link that opened in a new tab.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "get_page_content",
+        description: "Get the visible text content of the current page. Use this to read articles, search results, or extract information.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "get_current_state",
+        description: "Get the current URL and page title to know exactly which page you are currently on.",
+        inputSchema: {
+          type: "object",
+          properties: {},
         },
       },
     ],
@@ -203,6 +248,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       };
     }
 
+    if (name === "get_page_content") {
+      const text = await p.evaluate(() => document.body.innerText || "");
+      return {
+        content: [{ type: "text", text: text.substring(0, 40000) }], // limit to 40k chars to prevent context overflow
+      };
+    }
+
+    if (name === "get_current_state") {
+      const url = p.url();
+      const title = await p.title();
+      return {
+        content: [{ type: "text", text: `URL: ${url}\nTitle: ${title}` }],
+      };
+    }
+
     if (name === "action_by_id") {
       const locator = p.locator(`[polaris-id="${args.id}"]`).first();
       
@@ -213,6 +273,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         await locator.click({ force: true });
       } else if (args.action === "fill") {
         await locator.fill(args.text || "", { force: true });
+      } else if (args.action === "fill_and_enter") {
+        await locator.fill(args.text || "", { force: true });
+        await locator.press("Enter");
       } else if (args.action === "hover") {
         await locator.hover({ force: true });
       }
@@ -235,6 +298,30 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return {
         content: [{ type: "text", text: `Scrolled ${args.direction}.` }],
       };
+    }
+
+    if (name === "go_back") {
+      await p.goBack({ waitUntil: "domcontentloaded" }).catch(() => {});
+      await p.waitForLoadState("networkidle").catch(() => {});
+      return {
+        content: [{ type: "text", text: "Navigated back." }],
+      };
+    }
+
+    if (name === "close_tab") {
+      await p.close();
+      const pages = p.context().pages();
+      if (pages.length > 0) {
+        page = pages[pages.length - 1]; // Switch to the last available tab
+        return {
+          content: [{ type: "text", text: "Tab closed. Switched to previous tab." }],
+        };
+      } else {
+        page = await p.context().newPage();
+        return {
+          content: [{ type: "text", text: "Tab closed. Opened a new empty tab as no other tabs were left." }],
+        };
+      }
     }
 
     throw new Error(`Unknown tool: ${name}`);
