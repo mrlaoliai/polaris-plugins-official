@@ -1,14 +1,24 @@
 ---
 name: computer-ops
-description: Use the computer MCP tool to interact with desktop applications and the OS.
+description: Standard operating procedure for the computer MCP tool utilizing hybrid UI automation.
 ---
 
-You have permission to operate a real computer. Please strictly follow these visual recognition and operation guidelines:
+## 1. Operating Paradigm
+You are interacting with a live operating system. Your primary automation strategy must be structured UI parsing rather than visual coordinate estimation.
 
-1. **Visual Feedback Loop**: Before executing any click (`left_click`) or input (`type`/`paste`), you MUST call `screenshot` to get the current screen state. Analyze the screenshot carefully to find the absolute coordinates `[x, y]` of the target UI element before clicking.
-2. **Handling UI States / System Latency**: UI elements may have loading animations or network delays. After interacting with an element (e.g. clicking 'search'), do not assume the action completed instantly. Leave brief wait times between consecutive actions, and you MUST call `screenshot` again to verify the new UI state (like checking if a dropdown menu appeared) before proceeding.
-3. **Text Input Rules**: When inputting Chinese characters or long text, you MUST prioritize the `paste` action. This bypasses input method editor (IME) interference and prevents text truncation. Only use `type` or `key` for pure English characters or shortcuts.
-4. **Error Recovery**: If the screenshot does not match your expectations (e.g. click failed or text was typed in the wrong place), analyze the screen, use `mouse_move` to move the focus away, or send `key: escape` to cancel the current state, and retry.
-5. **Safety and Destructive Operations**: Be extremely cautious with terminal commands or file modifications. If you encounter an unexpected state, immediately stop and alert the user. For destructive operations, ask for explicit human confirmation.
-6. **Prioritize Shortcuts**: When performing standard actions like copy, paste, select all, or save, prefer using system keyboard shortcuts (e.g., Cmd+C/V) over mouse clicks, as they are generally more reliable.
-7. **Manage Focus/Windows**: Before interacting, ensure the target application is in the foreground and not blocked by other windows. Click to activate it if necessary.
+## 2. Standard Workflow
+1. **Activation**: Use `open_app` to launch or focus the target application natively. Do not use visual search for app icons.
+2. **Inspection**: Use `get_ui_tree` to retrieve the active window's accessibility elements (JSON).
+3. **Interaction**: Use `click_element_by_name` to interact with target elements found in the UI tree.
+4. **Verification**: Always execute a subsequent `get_ui_tree` or `screenshot` to confirm state changes (e.g., modals opening, pages loading) before issuing further commands.
+
+## 3. Fallback Protocol (Visual Mode)
+Initiate visual fallback ONLY if `get_ui_tree` fails or returns empty (e.g., unsupported platforms or custom rendering engines).
+1. Use `screenshot` to capture the screen state.
+2. Determine the exact `[x, y]` coordinate of the target.
+3. Use legacy commands: `mouse_move`, `left_click`, `right_click`, `double_click`.
+
+## 4. Input & Navigation Rules
+- **Text Entry**: Focus the target input field via `click_element_by_name` or coordinates, then use `type`.
+- **Shortcuts & Keys**: Use the `key` action for standard keyboard shortcuts (e.g., `enter`, `esc`, `ctrl`, `shift`).
+- **Error Recovery**: If an interaction fails, use `key` (e.g., `esc`) to dismiss blocking modals or `mouse_move` to clear hover states before retrying.

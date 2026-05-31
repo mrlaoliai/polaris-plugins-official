@@ -1,14 +1,21 @@
 ---
 name: browser-ops
-description: Use the browser MCP tool to interact with the web safely and effectively.
+description: Standard operating procedure for the browser MCP tool utilizing DOM-based automation.
 ---
 
-When interacting with the browser, you MUST use the provided DOM extraction tools instead of blindly guessing coordinates or taking raw screenshots. Follow these strict rules:
+## 1. Operating Paradigm
+You are controlling a web browser. You MUST rely on structural DOM extraction rather than raw visual coordinate estimation.
 
-1. **Get the Interactive DOM:** Before clicking or filling anything, ALWAYS call `get_interactive_dom` to get a list of all visible interactive elements (buttons, links, inputs).
-2. **Use Polaris ID:** Each element returned by `get_interactive_dom` will have a unique `polaris-id`. Use this ID with the `action_by_id` tool to click, hover, or fill. **NEVER attempt to click using raw x, y coordinates.**
-3. **Wait for Loading:** The `navigate` tool automatically waits for the page to load. Do not rush to interact if the network is busy.
-4. **Scroll for Visibility:** If a target element is not found within the current viewport (not returned in `get_interactive_dom`), use `scroll_page` to scroll down and call `get_interactive_dom` again.
-5. **Handle Pop-ups/Overlays:** If encountering cookie consent banners, ads, or overlays blocking target elements, identify their `polaris-id` and close/accept them first.
-6. **State Verification:** After submitting forms or clicking crucial links, you can re-fetch `get_interactive_dom` to verify the new page state.
-7. **Sensitive Actions:** For any sensitive actions (like form submissions or payments), ask the user for permission first before executing `action_by_id`.
+## 2. Standard Workflow
+1. **Navigation**: Use `navigate` to load the target URL.
+2. **Inspection**: Use `get_interactive_dom` to extract all visible interactive elements. Each element is assigned a unique `polaris-id`.
+3. **Interaction**: Use `action_by_id` with the corresponding `polaris-id` to execute clicks, hovers, or text inputs. NEVER use raw `[x, y]` coordinates.
+4. **Verification**: Call `get_interactive_dom` after critical interactions (e.g., form submissions, page transitions) to confirm the new state before proceeding.
+
+## 3. Navigation & Interaction Rules
+- **Scrolling**: Elements outside the current viewport may not appear in the DOM dump. Use `scroll_page` to navigate vertically, then re-call `get_interactive_dom`.
+- **Overlays & Modals**: Actively check the DOM for cookie consent banners, ads, or blocking overlays. Identify their `polaris-id` and close them before attempting to interact with underlying content.
+
+## 4. Error Recovery & Safety
+- **Missing Targets**: If an expected element is missing, do not guess IDs. Scroll the page or re-fetch the DOM.
+- **Sensitive Operations**: Require explicit human confirmation before executing critical actions via `action_by_id` (e.g., submitting payments, making destructive configuration changes).

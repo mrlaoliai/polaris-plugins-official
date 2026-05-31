@@ -22,21 +22,10 @@ jobs:
       - name: Sync version from git tag
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          npm pkg set version="$VERSION" --prefix plugins/computer_use
           npm pkg set version="$VERSION" --prefix plugins/knowledge_base
+          npm pkg set version="$VERSION" --prefix plugins/browser_use
 
-      - name: Install & build computer_use
-        run: |
-          cd plugins/computer_use
-          npm ci
-          npm run build
 
-      - name: Publish computer_use
-        run: |
-          cd plugins/computer_use
-          npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Install & build knowledge_base
         run: |
@@ -47,6 +36,19 @@ jobs:
       - name: Publish knowledge_base
         run: |
           cd plugins/knowledge_base
+          npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install & build browser_use
+        run: |
+          cd plugins/browser_use
+          npm ci
+          npm run build || echo "No build script"
+
+      - name: Publish browser_use
+        run: |
+          cd plugins/browser_use
           npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
