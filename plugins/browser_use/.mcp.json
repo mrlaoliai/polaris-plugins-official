@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "polarisagi-browser-use": {
-      "command": "npm",
-      "args": ["start"]
+      "command": "uv",
+      "args": ["run", "src/main.py"]
     }
   }
 }

@@ -12,20 +12,20 @@ An official Model Context Protocol (MCP) server plugin for [PolarisAGI](https://
 
 ## Architecture
 
-This plugin is a zero-dependency, pure TypeScript implementation utilizing native Node.js `fs` APIs. 
+This plugin is written in pure **Python** with zero external dependencies. It uses `uv` for seamless execution and environment isolation.
 
 ## Usage with PolarisAGI
 
-Configure your AI agent with the following MCP server setting, replacing `/your/allowed/dir` with the absolute path you wish to expose to the agent:
+Configure your AI agent with the following MCP server setting:
 
 ```json
 {
   "mcpServers": {
     "polarisagi-knowledge-base": {
-      "command": "npx",
-      "args": ["-y", "polarisagi-knowledge-base@latest"],
+      "command": "uv",
+      "args": ["run", "/path/to/polarisagi-plugins-official/plugins/knowledge_base/src/main.py"],
       "env": {
-        "POLARISAGI_KB_ALLOWED_DIR": "/your/allowed/dir"
+        "POLARISAGI_KB_ALLOWED_DIR": "/path/to/your/knowledge/base/folder"
       }
     }
   }
@@ -33,4 +33,5 @@ Configure your AI agent with the following MCP server setting, replacing `/your/
 ```
 
 ## Requirements
-- Node.js v18 or newer.
+- Python 3.10+
+- `uv` (Astral's Python package manager)

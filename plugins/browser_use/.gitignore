@@ -1,2 +1,12 @@
-node_modules/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# uv
+.venv/
+.uv/
+
+# Environment
 .env

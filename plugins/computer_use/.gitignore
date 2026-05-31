@@ -1,16 +1,22 @@
-# Dependency directories
-node_modules/
-
-# Compilation output
-dist/
-
 # Logs
-logs
+logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+
+# Environment
 
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Compiled Swift OCR binary (built on first run)
+src/find_text_on_screen
+find_text_on_screen
+
+# Temporary screenshot files
+ocr_temp.png
+screenshot.png
+
+# Python virtualenv / uv
+.venv/
+__pycache__/
+*.pyc

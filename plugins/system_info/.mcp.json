@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "polarisagi-computer-use": {
+    "polarisagi-systeminfo-mcp": {
       "command": "uv",
       "args": ["run", "src/main.py"]
     }

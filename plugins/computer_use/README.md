@@ -12,7 +12,7 @@ An official Model Context Protocol (MCP) server plugin for [PolarisAGI](https://
 
 ## Architecture
 
-This plugin is written in pure TypeScript and natively invokes OS-level APIs via `@nut-tree-fork/nut-js`. It requires zero manual binary installations and supports Windows, macOS (Intel/Apple Silicon), and Linux.
+This plugin is written in pure **Python** and natively invokes OS-level APIs via `mss` (for high-speed, direct-to-memory screen capture) and `pynput` (for cross-platform keyboard/mouse simulation). It also includes custom, locale-aware adapters (like `WeChatAdapter`) to handle complex UI layouts that standard accessibility trees miss.
 
 ## Usage with PolarisAGI
 
@@ -22,12 +22,17 @@ Configure your AI agent with the following MCP server setting:
 {
   "mcpServers": {
     "polarisagi-computer-use": {
-      "command": "npx",
-      "args": ["-y", "polarisagi-computer-mcp@latest"]
+      "command": "python",
+      "args": ["/path/to/polarisagi-plugins-official/plugins/computer_use/src/main.py"]
     }
   }
 }
 ```
 
 ## Requirements
-- Node.js v18 or newer.
+- Python 3.10+
+- `uv` (Astral's Python package manager)
+
+**Optional Dependencies (for UI tree parsing):**
+- Windows: `pywinauto` (Automatically installed via uv on Windows)
+- Linux: `sudo apt install python3-pyatspi`
