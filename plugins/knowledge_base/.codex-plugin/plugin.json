@@ -12,6 +12,7 @@
   "license": "MIT",
   "keywords": ["knowledge-base", "rag", "file-system", "mcp"],
   "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Knowledge Base",
     "shortDescription": "Read local files and list directories for RAG.",

@@ -1,6 +1,15 @@
 ---
 name: browser-ops
-description: Standard operating procedure for the browser MCP tool utilizing DOM-based automation.
+description: "Standard operating procedure for the browser MCP tool utilizing DOM-based automation."
+version: "1.0.0"
+tags:
+  - browser-use
+  - automation
+  - web
+exec_mode: ambient
+risk_level: medium
+sandbox: L2
+capability: read-write
 ---
 
 ## 1. Operating Paradigm

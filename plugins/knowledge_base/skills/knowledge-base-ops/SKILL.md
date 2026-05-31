@@ -1,6 +1,15 @@
 ---
 name: knowledge-base-ops
-description: Use the knowledge base MCP tool to explore and read files within the allowed directory.
+description: "Use the knowledge base MCP tool to explore and read files within the allowed directory."
+version: "1.0.0"
+tags:
+  - knowledge-base
+  - search
+  - context
+exec_mode: ambient
+risk_level: low
+sandbox: L2
+capability: read-only
 ---
 
 When interacting with the knowledge base:

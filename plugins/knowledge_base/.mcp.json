@@ -1,5 +1,5 @@
 {
-  "mcpServers": {
+  "mcp_servers": {
     "polarisagi-knowledge-base": {
       "command": "uv",
       "args": ["run", "src/main.py"],

@@ -1,6 +1,15 @@
 ---
 name: system-info
-description: Decision guide for using the system_info MCP plugin to gather environment context.
+description: "Decision guide for using the system_info MCP plugin to gather environment context."
+version: "1.0.0"
+tags:
+  - system-info
+  - context
+  - environment
+exec_mode: ambient
+risk_level: low
+sandbox: L2
+capability: read-only
 ---
 
 ## 1. Architecture

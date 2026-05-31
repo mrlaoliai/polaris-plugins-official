@@ -1,6 +1,15 @@
 ---
 name: computer-ops
-description: Decision guide for the computer MCP tool — universal desktop automation with layered operations.
+description: "Decision guide for the computer MCP tool — universal desktop automation with layered operations."
+version: "1.0.0"
+tags:
+  - computer-use
+  - automation
+  - desktop
+exec_mode: ambient
+risk_level: medium
+sandbox: L2
+capability: read-write
 ---
 
 ## 1. Architecture
